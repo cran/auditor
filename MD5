@@ -1,8 +1,9 @@
-3a6cecc0ec3493c1e019bc6141f517ac *DESCRIPTION
+474a4494a3720fb3d4c7713bd0a129bc *DESCRIPTION
 a80c48c6f878fb8d51969f829753e8fa *NAMESPACE
+ee19dbef24ed5208d4780eacccd3bba5 *NEWS.md
 0611a308f3394c0a1c6d36f72b45d1aa *R/audit.R
 d41d8cd98f00b204e9800998ecf8427e *R/error.R
-a5d97f9f156bd8a2dc95ee14eddf3e83 *R/miscellaneous_functions.R
+256f0ba47badc59172f0fe5912892f0d *R/miscellaneous_functions.R
 93856fd009530b8a00153ba13642821b *R/plotACF.R
 8e761298e15c8e5c47ce153dd88db124 *R/plotAutocorrelation.R
 a8189e3217e9d52f9e63a56a858a73a8 *R/plotCooksDistance.R
