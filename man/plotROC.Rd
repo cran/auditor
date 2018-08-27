@@ -7,7 +7,7 @@
 plotROC(object, ...)
 }
 \arguments{
-\item{object}{An object of class ModelAudit.}
+\item{object}{An object of class ModelAudit or modelEvaluation.}
 
 \item{...}{Other modelAudit objects to be plotted together.}
 }
@@ -15,7 +15,7 @@ plotROC(object, ...)
 ggplot object
 }
 \description{
-Receiver Operating Characterstic Curve is a plot of the true positive rate (TPR) against the false positive rate (FPR) for the different thresholds.
+Receiver Operating Characteristic Curve is a plot of the true positive rate (TPR) against the false positive rate (FPR) for the different thresholds.
 It is useful for measuring and comparing the accuracy of the classificators.
 }
 \examples{

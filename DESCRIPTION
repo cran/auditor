@@ -1,6 +1,6 @@
 Package: auditor
 Title: Model Audit - Verification, Validation, and Error Analysis
-Version: 0.2.1
+Version: 0.3.0
 Authors@R: c(
     person("Alicja", "Gosiewska", , "alicjagosiewska@gmail.com", role = c("aut", "cre")),
     person("Przemyslaw", "Biecek", role =  c("aut", "ths"))
@@ -12,16 +12,18 @@ Depends: R (>= 3.0.0)
 License: GPL
 Encoding: UTF-8
 LazyData: true
-Imports: car, factoextra, fdrtool, GGally, ggplot2, ggrepel, hnp,
-        plotROC, ROCR, tseries
-RoxygenNote: 6.0.1
-Suggests: MASS, mlbench, randomForest, testthat
+Imports: car, factoextra, fdrtool, GGally, ggplot2, ggrepel, gridExtra,
+        hnp, plotROC, ROCR, tseries
+RoxygenNote: 6.1.0
+Suggests: aods3, breakDown, DALEX, e1071, gamlss, knitr, lme4, MASS,
+        mlbench, randomForest, rmarkdown, testthat, covr
+VignetteBuilder: knitr
 URL: https://mi2-warsaw.github.io/auditor/
 BugReports: https://github.com/mi2-warsaw/auditor/issues
 NeedsCompilation: no
-Packaged: 2018-05-13 10:53:25 UTC; alicj
+Packaged: 2018-08-27 21:19:40 UTC; alicj
 Author: Alicja Gosiewska [aut, cre],
   Przemyslaw Biecek [aut, ths]
 Maintainer: Alicja Gosiewska <alicjagosiewska@gmail.com>
 Repository: CRAN
-Date/Publication: 2018-05-13 14:07:23 UTC
+Date/Publication: 2018-08-27 21:54:30 UTC

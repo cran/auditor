@@ -1,10 +1,12 @@
 library(auditor)
+library(DALEX)
 library(car)
 library(MASS)
 library(randomForest)
 library(mlbench)
 data("PimaIndiansDiabetes")
 set.seed(71)
+PimaIndiansDiabetes$diabetes <- ifelse(PimaIndiansDiabetes$diabetes == "pos", 1,0 )
 
 model.lm <- lm(prestige~education + women + income, data = Prestige)
 model.glm <- glm(Postwt ~ Prewt + Treat + offset(Prewt),
@@ -23,3 +25,5 @@ au.rf <- audit(model.rf, label="rf")
 au.class.glm <- audit(model.class.glm, label="class glm")
 au.class.rf <- audit(model.class.rf)
 
+explainer_lm <- explain(model.lm, data = Prestige, y = Prestige$prestige)
+au_expl_lm <- audit(explainer_lm)

@@ -1,0 +1,93 @@
+---
+title: "Model Evaluation Audit"
+author: "Alicja Gosiewska"
+date: "`r Sys.Date()`"
+output: html_document
+vignette: >
+  %\VignetteEngine{knitr::knitr}
+  %\VignetteIndexEntry{Model Evaluation Audit}
+  %\usepackage[UTF-8]{inputenc}
+---
+
+
+```{r setup, echo = FALSE}
+knitr::opts_chunk$set(warning = FALSE)
+knitr::opts_chunk$set(message = FALSE)
+```
+
+
+# Model Evaluation Audit for Classification Problem
+
+In this vignette we present plots for classification models evaluation.
+
+```{r}
+library(auditor)
+library(mlbench)
+```
+
+### Dataset
+
+We work on PimaIndianDiabetes dataset.
+
+```{r}
+data(PimaIndiansDiabetes)
+head(PimaIndiansDiabetes)
+```
+
+We transform dependent variable into binary vector.
+
+```{r}
+pima <- PimaIndiansDiabetes
+pima$diabetes <- ifelse(pima$diabetes == "pos", 1, 0)
+```
+
+### Models
+
+We fit 2 models: glm and svm.
+
+```{r}
+model_glm <- glm(diabetes~., data = pima, family = binomial)
+
+library(e1071)
+model_svm <- svm(diabetes~., data = pima)
+```
+
+### Model Audit
+
+First step of auditing is creating `modelAudit` object. It’s an object that can be used to audit a model. It wraps up a model with meta-data.
+
+```{r}
+au_glm <- audit(model_glm, data = pima, y = pima$diabetes)
+au_svm <- audit(model_svm, data = pima, y = pima$diabetes, label = "svm")
+```
+
+
+### Receiver Operating Characteristic (ROC)
+
+`modelAudit` object can be used for plotting charts.
+
+```{r}
+plotROC(au_glm, au_svm)
+```
+
+### LIFT Chart
+
+```{r}
+plotLIFT(au_glm, au_svm)
+```
+
+
+
+# Other methods
+
+Other methods and plots are described in vignettes: 
+
+* [Model Residuals audit](https://mi2-warsaw.github.io/auditor/articles/model_residuals_audit.html)
+
+* [Model Fit audit](https://mi2-warsaw.github.io/auditor/articles/model_fit_audit.html)
+
+* [Model Performance audit](https://mi2-warsaw.github.io/auditor/articles/model_performance_audit.html)
+
+* [Observation Influence audit](https://mi2-warsaw.github.io/auditor/articles/observation_influence_audit.html)
+
+
