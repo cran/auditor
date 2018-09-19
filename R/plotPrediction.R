@@ -7,7 +7,7 @@
 #' @param ... Other modelAudit or modelResiduals objects to be plotted together.
 #' @param variable Only for modelAudit objects. Name of model variable to order residuals. If value is NULL data order is taken. If value is "Observed response" the data is ordered by a vector of actual response (\code{y} parameter passed to the \code{\link{audit}} function).
 #' @param smooth Logical, indicates whenever smooth line should be added.
-#' @param abline Logical, indicates whenever function y=x should be added.
+#' @param abline Logical, indicates whenever function y=x shoulbe added.
 #' @param split Character. If "model" plot will be splitted by model.
 #'
 #' @examples

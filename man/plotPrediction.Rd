@@ -16,7 +16,7 @@ plotPrediction(object, ..., variable = NULL, smooth = FALSE,
 
 \item{smooth}{Logical, indicates whenever smooth line should be added.}
 
-\item{abline}{Logical, indicates whenever function y=x should be added.}
+\item{abline}{Logical, indicates whenever function y=x shoulbe added.}
 
 \item{split}{Character. If "model" plot will be splitted by model.}
 }

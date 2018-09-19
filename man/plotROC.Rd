@@ -15,7 +15,7 @@ plotROC(object, ...)
 ggplot object
 }
 \description{
-Receiver Operating Characteristic Curve is a plot of the true positive rate (TPR) against the false positive rate (FPR) for the different thresholds.
+Receiver Operating Characterstic Curve is a plot of the true positive rate (TPR) against the false positive rate (FPR) for the different thresholds.
 It is useful for measuring and comparing the accuracy of the classificators.
 }
 \examples{
