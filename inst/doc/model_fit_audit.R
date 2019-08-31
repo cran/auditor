@@ -11,44 +11,25 @@ data("corn", package = "hnp")
 head(corn)
 
 ## ----binomial2, results='hide', fig.keep='all'---------------------------
-model.bin <- glm(cbind(y, m - y) ~ extract, family = binomial, data = corn)
+model_bin <- glm(cbind(y, m - y) ~ extract, family = binomial, data = corn)
 
-bin_au <- audit(model.bin, data = corn, y = corn$y)
+bin_exp <- DALEX::explain(model_bin, data = corn, y = corn$y)
 
 ## ------------------------------------------------------------------------
-plotHalfNormal(bin_au, sim=500)
+bin_hnp <- model_halfnormal(bin_exp)
+
+## ------------------------------------------------------------------------
+plot(bin_hnp, sim=500)
+# or
+# plot_halfnormal(bin_hnp, sim = 500)
 
 ## ---- results='hide', fig.keep='all'-------------------------------------
-model.bin <- glm(cbind(y, m - y) ~ extract, family = binomial, data = corn)
-bin_au <- audit(model.bin, data = corn, y = corn$y)
-
-bin_mf <- modelFit(bin_au)
-
-plot(bin_mf, sim=500)
-
-## ----quasibinomial2, results='hide', fig.keep='all'----------------------
-fit2_b <- glm(cbind(y, m - y) ~ extract, family = quasibinomial, data = corn)
-fit2_b_au <- audit(fit2_b, data = corn, y = corn$y)
-plotHalfNormal(fit2_b_au, sim=500)
-
-## ----beta-binomial2, results='hide', fig.keep='all'----------------------
-library(aods3)
-fit3_b <- aodml(cbind(y, m - y) ~ extract, family = "bb", data = corn)
-fit3_b_au <- audit(fit3_b, data = corn, y = corn$y)
-plotHalfNormal(fit3_b_au, sim=500)
-
-## ----normal-logit-binomial, results='hide', fig.keep='all'---------------
-x <- factor(seq_len(nrow(corn)))
-fit4_b <- glmer(cbind(y, m - y) ~ extract + (1 | x), family = binomial, data = corn)
-fit4_b_au <- audit(fit4_b, data = corn, y = corn$y)
-plotHalfNormal(fit4_b_au, sim=500)
-
-## ---- results='hide', fig.keep='all'-------------------------------------
-plotHalfNormal(fit2_b_au, quant.scale = TRUE)
+plot(bin_hnp, quantiles = TRUE)
 
 ## ------------------------------------------------------------------------
 library(randomForest)
 iris_rf <- randomForest(Species ~ ., data=iris)
-iris_rf_au <- audit(iris_rf, data = iris, y = iris$Species)
-plotHalfNormal(iris_rf_au)
+iris_rf_exp <- DALEX::explain(iris_rf, data = iris, y = as.numeric(iris$Species)-1)
+iris_rf_hnp <- model_halfnormal(iris_rf_exp)
+plot_halfnormal(iris_rf_hnp)
 

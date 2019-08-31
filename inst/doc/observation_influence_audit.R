@@ -4,28 +4,26 @@ knitr::opts_chunk$set(message = FALSE)
 
 ## ------------------------------------------------------------------------
 library(DALEX)
-data("apartments")
-head(apartments)
+data("dragons")
+head(dragons)
 
 ## ------------------------------------------------------------------------
-lm_model <- lm(m2.price ~ construction.year + surface + floor + no.rooms + district, data = apartments)
+lm_model <- lm(life_length ~ ., data = dragons)
 
 ## ------------------------------------------------------------------------
 library("randomForest")
 set.seed(59)
-rf_model <- randomForest(m2.price ~ construction.year + surface + floor +  no.rooms + district, data = apartments)
+rf_model <- randomForest(life_length ~ ., data = dragons)
 
 ## ------------------------------------------------------------------------
-library("auditor")
-
-lm_audit <- audit(lm_model, label = "lm", data = apartmentsTest, y = apartmentsTest$m2.price)
-rf_audit <- audit(rf_model, label = "rf", data = apartmentsTest, y = apartmentsTest$m2.price)
+lm_exp <- DALEX::explain(lm_model, label = "lm", data = dragons, y = dragons$life_length)
+rf_exp <- DALEX::explain(rf_model, label = "rf", data = dragons, y = dragons$life_length)
 
 ## ------------------------------------------------------------------------
-lm_oi <- observationInfluence(lm_audit)
+library(auditor)
+lm_cd <- model_cooksdistance(lm_exp)
 
-head(lm_oi)
 
 ## ------------------------------------------------------------------------
-plot(lm_oi)
+plot(lm_cd)
 

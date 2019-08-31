@@ -4,7 +4,7 @@
 \alias{audit}
 \title{Create modelAudit object}
 \usage{
-audit(object, data = NULL, y = NULL, predict.function = yhat,
+audit(object, data = NULL, y = NULL, predict.function = NULL,
   residual.function = NULL, label = NULL)
 }
 \arguments{
@@ -39,18 +39,21 @@ An object of class ModelAudit, which contains:
 Function \code{audit} create modelAudit object for further validation of a model.
 Models may have very different structures. This function creates a unified representation of a model and calculates residuals,
 which can be further processed by various error analysis functions.
+
+Function 'audit()' is deprecated, please, use an object of class 'explainer' created with function
+\code{\link[DALEX]{explain}} from the DALEX package.
 }
 \examples{
-library(MASS)
-model.glm <- glm(Postwt ~ Prewt + Treat + offset(Prewt), family = gaussian, data = anorexia)
-audit.glm <- audit(model.glm)
+titanic <- na.omit(DALEX::titanic)
+model_glm <- glm(survived ~ ., family = binomial, data = titanic)
+audit_glm <- audit(model_glm)
 
-p.fun <- function(model, data){predict(model, data, response = "link")}
-audit.glm.newpred <- audit(model.glm, predict.function = p.fun)
+p_fun <- function(model, data){predict(model, data, response = "link")}
+audit_glm_newpred <- audit(model_glm, predict.function = p_fun)
 
 
 library(randomForest)
-model.rf <- randomForest(Species ~ ., data=iris)
-audit.rf <- audit(model.rf)
+model_rf <- randomForest(Species ~ ., data=iris)
+audit_rf <- audit(model_rf)
 
 }

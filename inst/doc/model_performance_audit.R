@@ -3,43 +3,41 @@ knitr::opts_chunk$set(warning = FALSE)
 knitr::opts_chunk$set(message = FALSE)
 
 ## ------------------------------------------------------------------------
-library(DALEX)
-data("apartments")
-head(apartments)
+dragons <- DALEX::dragons
+head(dragons)
 
 ## ------------------------------------------------------------------------
-lm_model <- lm(m2.price ~ construction.year + surface + floor + no.rooms + district, data = apartments)
+lm_model <- lm(life_length ~ ., data = dragons)
 
 ## ------------------------------------------------------------------------
 library("randomForest")
 set.seed(59)
-rf_model <- randomForest(m2.price ~ construction.year + surface + floor +  no.rooms + district, data = apartments)
+rf_model <- randomForest(life_length ~ ., data = dragons)
 
 ## ------------------------------------------------------------------------
-library("auditor")
-
-lm_audit <- audit(lm_model, label = "lm", data = apartmentsTest, y = apartmentsTest$m2.price)
-rf_audit <- audit(rf_model, label = "rf", data = apartmentsTest, y = apartmentsTest$m2.price)
+lm_exp <- DALEX::explain(lm_model, label = "lm", data = dragons, y = dragons$life_length)
+rf_exp <- DALEX::explain(rf_model, label = "rf", data = dragons, y = dragons$life_length)
 
 ## ------------------------------------------------------------------------
-lm_mp <- modelPerformance(lm_audit, scores = c("MAE", "MSE", "REC", "RROC"))
-rf_mp <- modelPerformance(rf_audit, scores = c("MAE", "MSE", "REC", "RROC"))
+library(auditor)
+lm_mp <- model_performance(lm_exp)
+rf_mp <- model_performance(rf_exp)
 
 lm_mp
 
 ## ------------------------------------------------------------------------
-plot(lm_mp, rf_mp, table = TRUE)
+plot(lm_mp, rf_mp)
 
 ## ------------------------------------------------------------------------
-new_score <- function(object) sum((object$residuals)^3)
+new_score <- function(object) sum(sqrt(abs(object$residuals)))
 
-lm_mp <- modelPerformance(lm_audit,  
-                          scores = c("MAE", "MSE", "REC", "RROC"), 
-                          new.score = new_score)
+lm_mp <- model_performance(lm_exp,  
+                          score = c("mae", "mse", "rec", "rroc"), 
+                          new_score = new_score)
 
-rf_mp <- modelPerformance(rf_audit,  
-                          scores = c("MAE", "MSE", "REC", "RROC"), 
-                          new.score = new_score)
+rf_mp <- model_performance(rf_exp,  
+                          score = c("mae", "mse", "rec", "rroc"), 
+                          new_score = new_score)
 
-plotModelRanking(lm_mp, rf_mp, table = TRUE)
+plot(lm_mp, rf_mp)
 

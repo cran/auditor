@@ -3,30 +3,32 @@ knitr::opts_chunk$set(warning = FALSE)
 knitr::opts_chunk$set(message = FALSE)
 
 ## ------------------------------------------------------------------------
-library(auditor)
-library(mlbench)
+titanic <- na.omit(DALEX::titanic)
+titanic$survived = as.numeric(titanic$survived)-1
+head(titanic)
 
 ## ------------------------------------------------------------------------
-data(PimaIndiansDiabetes)
-head(PimaIndiansDiabetes)
-
-## ------------------------------------------------------------------------
-pima <- PimaIndiansDiabetes
-pima$diabetes <- ifelse(pima$diabetes == "pos", 1, 0)
-
-## ------------------------------------------------------------------------
-model_glm <- glm(diabetes~., data = pima, family = binomial)
+model_glm <- glm(survived~., data = titanic, family = binomial)
 
 library(e1071)
-model_svm <- svm(diabetes~., data = pima)
+model_svm <- svm(survived~., data = titanic)
 
 ## ------------------------------------------------------------------------
-au_glm <- audit(model_glm, data = pima, y = pima$diabetes)
-au_svm <- audit(model_svm, data = pima, y = pima$diabetes, label = "svm")
+exp_glm <- DALEX::explain(model_glm, data = titanic, y = titanic$survived)
+exp_svm <- DALEX::explain(model_svm, data = titanic, y = titanic$survived, label = "svm")
 
 ## ------------------------------------------------------------------------
-plotROC(au_glm, au_svm)
+library(auditor)
+eva_glm <- model_evaluation(exp_glm)
+eva_svm <- model_evaluation(exp_svm)
 
 ## ------------------------------------------------------------------------
-plotLIFT(au_glm, au_svm)
+plot(eva_glm, eva_svm, type = "roc")
+# or
+# plot_roc(eva_glm, eva_svm)
+
+## ------------------------------------------------------------------------
+plot(eva_glm, eva_svm, type = "lift")
+# or
+# plot_lift(eva_glm, eva_svm)
 

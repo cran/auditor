@@ -20,60 +20,63 @@ knitr::opts_chunk$set(message = FALSE)
 
 In this vignette we present plots for classification models evaluation.
 
-```{r}
-library(auditor)
-library(mlbench)
-```
 
 ### Dataset
 
-We work on PimaIndianDiabetes dataset.
+We work on titanic dataset form the `DALEX` package.
 
 ```{r}
-data(PimaIndiansDiabetes)
-head(PimaIndiansDiabetes)
+titanic <- na.omit(DALEX::titanic)
+titanic$survived = as.numeric(titanic$survived)-1
+head(titanic)
 ```
 
-We transform dependent variable into binary vector.
-
-```{r}
-pima <- PimaIndiansDiabetes
-pima$diabetes <- ifelse(pima$diabetes == "pos", 1, 0)
-```
 
 ### Models
 
 We fit 2 models: glm and svm.
 
 ```{r}
-model_glm <- glm(diabetes~., data = pima, family = binomial)
+model_glm <- glm(survived~., data = titanic, family = binomial)
 
 library(e1071)
-model_svm <- svm(diabetes~., data = pima)
+model_svm <- svm(survived~., data = titanic)
 ```
 
 ### Model Audit
 
-First step of auditing is creating `modelAudit` object. It’s an object that can be used to audit a model. It wraps up a model with meta-data.
+The first step is creating `explainer` object with the `DALEX` package. It’s an object that can be used to audit a model. It wraps up a model with meta-data.
 
 ```{r}
-au_glm <- audit(model_glm, data = pima, y = pima$diabetes)
-au_svm <- audit(model_svm, data = pima, y = pima$diabetes, label = "svm")
+exp_glm <- DALEX::explain(model_glm, data = titanic, y = titanic$survived)
+exp_svm <- DALEX::explain(model_svm, data = titanic, y = titanic$survived, label = "svm")
+```
+
+Second step is creating `auditor_model_evaluation` object that can be further used for validating a model.
+
+```{r}
+library(auditor)
+eva_glm <- model_evaluation(exp_glm)
+eva_svm <- model_evaluation(exp_svm)
 ```
 
 
 ### Receiver Operating Characteristic (ROC)
 
-`modelAudit` object can be used for plotting charts.
+`auditor_model_evaluation` object can be used for plotting charts.
 
 ```{r}
-plotROC(au_glm, au_svm)
+plot(eva_glm, eva_svm, type = "roc")
+# or
+# plot_roc(eva_glm, eva_svm)
 ```
 
 ### LIFT Chart
 
 ```{r}
-plotLIFT(au_glm, au_svm)
+plot(eva_glm, eva_svm, type = "lift")
+# or
+# plot_lift(eva_glm, eva_svm)
 ```
 
 
@@ -82,12 +85,12 @@ plotLIFT(au_glm, au_svm)
 
 Other methods and plots are described in vignettes: 
 
-* [Model Residuals audit](https://mi2datalab.github.io/auditor/articles/model_residuals_audit.html)
+* [Model Residuals audit](https://modeloriented.github.io/auditor/articles/model_residuals_audit.html)
 
-* [Model Fit audit](https://mi2datalab.github.io/auditor/articles/model_fit_audit.html)
+* [Model Fit audit](https://modeloriented.github.io/auditor/articles/model_fit_audit.html)
 
-* [Model Performance audit](https://mi2datalab.github.io/auditor/articles/model_performance_audit.html)
+* [Model Performance audit](https://modeloriented.github.io/auditor/articles/model_performance_audit.html)
 
-* [Observation Influence audit](https://mi2datalab.github.io/auditor/articles/observation_influence_audit.html)
+* [Observation Influence audit](https://modeloriented.github.io/auditor/articles/observation_influence_audit.html)
 
 

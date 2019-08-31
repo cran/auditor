@@ -5,142 +5,118 @@ knitr::opts_chunk$set(warning = FALSE)
 
 ## ------------------------------------------------------------------------
 library(DALEX)
-data("apartments")
-head(apartments)
+data("dragons")
+head(dragons)
 
 ## ------------------------------------------------------------------------
-lm_model <- lm(m2.price ~ construction.year + surface + floor + no.rooms + district, data = apartments)
+lm_model <- lm(life_length ~ ., data = dragons)
 
 ## ------------------------------------------------------------------------
 library("randomForest")
 set.seed(59)
-rf_model <- randomForest(m2.price ~ construction.year + surface + floor +  no.rooms + district, data = apartments)
+rf_model <- randomForest(life_length ~ ., data = dragons)
 
 ## ------------------------------------------------------------------------
-library("auditor")
-
-lm_audit <- audit(lm_model, label = "lm", data = apartmentsTest, y = apartmentsTest$m2.price)
-rf_audit <- audit(rf_model, label = "rf", data = apartmentsTest, y = apartmentsTest$m2.price)
+lm_exp <- DALEX::explain(lm_model, label = "lm", data = dragons, y = dragons$life_length)
+rf_exp <- DALEX::explain(rf_model, label = "rf", data = dragons, y = dragons$life_length)
 
 ## ------------------------------------------------------------------------
-lm_mr <- modelResiduals(lm_audit)
-rf_mr <- modelResiduals(rf_audit)
+library(auditor)
+lm_mr <- model_residual(lm_exp)
+rf_mr <- model_residual(rf_exp)
 
-head(lm_mr)
-
-## ------------------------------------------------------------------------
-lm_mr_district <- modelResiduals(lm_audit, variable = "district")
-rf_mr_district <- modelResiduals(rf_audit, variable = "district")
-
-lm_mr_fitted <- modelResiduals(lm_audit, variable = "Fitted values")
-rf_mr_fitted <- modelResiduals(rf_audit, variable = "Fitted values")
-
-head(lm_mr_district)
 
 ## ------------------------------------------------------------------------
-lm_mr_surface <- modelResiduals(lm_audit, variable = "surface")
-plot(lm_mr_surface, type = "ACF")
+plot(lm_mr, type = "acf", variable = "year_of_discovery")
 
 # alternative:
-# plotACF(lm_audit, variable = "surface")
+# plot_acf(lm_mr, variable = "year_of_discovery")
 
 ## ------------------------------------------------------------------------
-plot(rf_mr_fitted, type = "Autocorrelation")
+plot(rf_mr, type = "autocorrelation")
 
 # alternative:
-# plotAutocorrelation(rf_audit, variable = "Fitted values")
+# plot_autocorrelation(rf_mr)
 
 ## ------------------------------------------------------------------------
-rf_score_DW <- scoreDW(rf_audit, variable = "Fitted values")
-rf_score_Runs <- scoreRuns(rf_audit, variable = "Fitted values")
+rf_score_dw <- score_dw(rf_exp)
+rf_score_runs <- score_runs(rf_exp)
 
-rf_score_DW$score
-rf_score_Runs$score
+rf_score_dw$score
+rf_score_runs$score
 
 ## ------------------------------------------------------------------------
-plot(rf_mr, lm_mr, type = "ModelCorrelation")
+plot(rf_mr, lm_mr, type = "correlation")
 
 # alternative:
-# plotModelCorrelation(rf_audit, lm_audit)
+# plotM_correlation(rf_mr, lm_mr)
 
 ## ------------------------------------------------------------------------
-plot(rf_mr, lm_mr, type = "ModelPCA")
+plot(rf_mr, lm_mr, type = "pca")
 
 # alternative:
-# plotModelPCA(rf_audit, lm_audit)
+# plot_pca(rf_audit, lm_audit)
 
 ## ------------------------------------------------------------------------
-lm_mr_m2 <- modelResiduals(lm_audit, variable = "m2.price")
-rf_mr_m2 <- modelResiduals(rf_audit, variable = "m2.price")
-
-plot(rf_mr_m2, lm_mr_m2, type = "Prediction")
+plot(rf_mr, lm_mr, variable = "life_length", type = "prediction")
 
 # alternative:
-# plotPrediction(rf_audit, lm_audit, variable = "m2.price")
+# plot_prediction(rf_audit, lm_audit, variable = "life_length")
 
 ## ------------------------------------------------------------------------
-plot(rf_mr_fitted, lm_mr_fitted, type = "Residual")
+plot(rf_mr, lm_mr, type = "prediction")
 
 # alternative:
-# plotResidual(rf_audit, lm_audit, variable = "Fitted values")
+# plot_prediction(rf_mr, lm_mr)
 
 ## ------------------------------------------------------------------------
-plot(rf_mr, lm_mr, type = "REC")
+plot(rf_mr, lm_mr, type = "rec")
 
 # alternative:
-# plotREC(rf_audit, lm_audit)
+# plot_rec(rf_mr, lm_mr)
 
 ## ------------------------------------------------------------------------
-plot(rf_mr, type = "Residual")
+plot(rf_mr, type = "residual")
 
 # alternative:
-# plotResidual(rf_audit)
+# plot_residual(rf_mr)
 
 ## ------------------------------------------------------------------------
-plot(rf_mr_fitted, lm_mr_fitted, type = "Residual")
+plot(rf_mr, lm_mr, type = "residual", variable = "_y_hat_")
 
 # alternative:
-# plotResidual(rf_audit, lm_audit, variable = "Fitted values")
+# plot_residual(rf_mr, lm_mr, variable = "_y_hat_")
 
 ## ------------------------------------------------------------------------
-plot(lm_mr, rf_mr, type = "ResidualBoxplot")
+plot(lm_mr, rf_mr, type = "residual_boxplot")
 
 # alternative
-# plotResidualBoxplot(lm_audit, rf_audit)
+# plot_residual_boxplot(lm_mr, rf_mr)
 
 ## ------------------------------------------------------------------------
-plot(rf_mr, lm_mr, type = "ResidualDensity")
+plot(rf_mr, lm_mr, type = "residual_density")
 
 # alternative
-# plotResidualDensity(rf_audit, lm_audit)
+# plot_residual_density(rf_mr, lm_mr)
 
 ## ------------------------------------------------------------------------
-plotResidualDensity(lm_mr_m2, rf_mr_m2)
-
-# alternative
-# plotResidualDensity(rf_audit, lm_audit, variable = "m2.price")
+plot_residual_density(rf_mr, lm_mr, variable = "life_length")
 
 ## ------------------------------------------------------------------------
-plotResidualDensity(lm_mr_district, rf_mr_district)
-
-# alternative
-# plotResidualDensity(rf_audit, lm_audit, variable = "district")
-
-## ------------------------------------------------------------------------
-plot(rf_mr, lm_mr, type = "RROC")
+plot(rf_mr, lm_mr, type = "rroc")
 
 # alternative:
-# plotRROC(rf_audit, lm_audit)
+# plot_rroc(rf_mr, lm_mr)
 
 ## ------------------------------------------------------------------------
-plot(rf_mr_fitted, lm_mr_fitted, type = "ScaleLocation")
+plot(rf_mr, lm_mr, type = "scalelocation")
 
 # alternative:
-# plotScaleLocation(rf_audit, lm_audit, variable = "Fitted values")
+# plot_scalelocation(rf_mr, lm_mr)
 
 ## ------------------------------------------------------------------------
-plot(rf_mr, lm_mr, type = "TwoSidedECDF")
+plot(rf_mr, lm_mr, type = "tsecdf")
 
 # alternative
-# TwoSidedECDF(rf_audit, lm_audit)
+# plot_tsecdf(rf_audit, lm_audit)
 
