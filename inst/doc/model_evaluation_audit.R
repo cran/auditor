@@ -8,12 +8,12 @@ titanic$survived = as.numeric(titanic$survived)-1
 head(titanic)
 
 ## ------------------------------------------------------------------------
-model_glm <- glm(survived~., data = titanic, family = binomial)
+model_glm <- glm(survived ~ ., data = titanic, family = binomial)
 
 library(e1071)
-model_svm <- svm(survived~., data = titanic)
+model_svm <- svm(survived ~ ., data = titanic)
 
-## ------------------------------------------------------------------------
+## ----results = 'hide'----------------------------------------------------
 exp_glm <- DALEX::explain(model_glm, data = titanic, y = titanic$survived)
 exp_svm <- DALEX::explain(model_svm, data = titanic, y = titanic$survived, label = "svm")
 

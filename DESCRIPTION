@@ -1,6 +1,6 @@
 Package: auditor
 Title: Model Audit - Verification, Validation, and Error Analysis
-Version: 1.0.0
+Version: 1.1.0
 Authors@R: c(
     person("Alicja", "Gosiewska", , "alicjagosiewska@gmail.com", role = c("aut", "cre"),
       comment = c(ORCID = "0000-0001-6563-5742")),
@@ -8,7 +8,8 @@ Authors@R: c(
       comment = c(ORCID = "0000-0001-8423-1823")),
     person("Hubert", "Baniecki", role =  c("aut")),
     person("Tomasz", "Mikołajczyk", role =  c("aut")),
-    person("Michal", "Burdukiewicz", role =  c("ctb"))
+    person("Michal", "Burdukiewicz", role =  c("ctb")),
+    person("Szymon", "Maksymiuk", role =  c("ctb"))
   )
 Description: Provides an easy to use unified interface for creating validation plots for any model. 
   The 'auditor' helps to avoid repetitive work consisting of writing code needed to create residual plots. 
@@ -25,12 +26,13 @@ VignetteBuilder: knitr
 URL: https://github.com/ModelOriented/auditor
 BugReports: https://github.com/ModelOriented/auditor/issues
 NeedsCompilation: no
-Packaged: 2019-08-31 08:31:13 UTC; user
+Packaged: 2019-09-24 06:31:41 UTC; user
 Author: Alicja Gosiewska [aut, cre] (<https://orcid.org/0000-0001-6563-5742>),
   Przemyslaw Biecek [aut, ths] (<https://orcid.org/0000-0001-8423-1823>),
   Hubert Baniecki [aut],
   Tomasz Mikołajczyk [aut],
-  Michal Burdukiewicz [ctb]
+  Michal Burdukiewicz [ctb],
+  Szymon Maksymiuk [ctb]
 Maintainer: Alicja Gosiewska <alicjagosiewska@gmail.com>
 Repository: CRAN
-Date/Publication: 2019-08-31 10:50:02 UTC
+Date/Publication: 2019-09-24 07:20:06 UTC

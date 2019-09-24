@@ -27,11 +27,11 @@ score_mse <- function(object){
   if(!("explainer" %in% class(object))) stop("The function requires an object created with explain() function from the DALEX package.")
 
   mse_results <- list(
-    name = "mae",
+    name = "mse",
     score = mean((object$y - object$y_hat)^2)
     )
 
-  class(mse_results) <- "score_audit"
+  class(mse_results) <- "auditor_score"
   mse_results
 }
 

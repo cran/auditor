@@ -3,7 +3,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 
-<title>Model Evaluation Audit for Classification Problem</title>
+<title>Data</title>
 
 <script type="text/javascript">
 window.onload = function() {
@@ -201,13 +201,11 @@ hr {
 </head>
 
 <body>
-<h1>Model Evaluation Audit for Classification Problem</h1>
+<p>In this vignette we present plots for evaluation of classification models.</p>
 
-<p>In this vignette we present plots for classification models evaluation.</p>
+<h2>Data</h2>
 
-<h3>Dataset</h3>
-
-<p>We work on titanic dataset form the <code>DALEX</code> package.</p>
+<p>We work on <code>titanic</code> dataset form the <code>DALEX</code> package.</p>
 
 <pre><code class="r">titanic &lt;- na.omit(DALEX::titanic)
 titanic$survived = as.numeric(titanic$survived)-1
@@ -223,50 +221,22 @@ head(titanic)
 ## 6   male  25   3rd Southampton United States  7.13     0     0        1
 </code></pre>
 
-<h3>Models</h3>
+<h2>Models</h2>
 
 <p>We fit 2 models: glm and svm.</p>
 
-<pre><code class="r">model_glm &lt;- glm(survived~., data = titanic, family = binomial)
+<pre><code class="r">model_glm &lt;- glm(survived ~ ., data = titanic, family = binomial)
 
 library(e1071)
-model_svm &lt;- svm(survived~., data = titanic)
+model_svm &lt;- svm(survived ~ ., data = titanic)
 </code></pre>
 
-<h3>Model Audit</h3>
+<h2>Preparation for evaluation analysis</h2>
 
 <p>The first step is creating <code>explainer</code> object with the <code>DALEX</code> package. It’s an object that can be used to audit a model. It wraps up a model with meta-data.</p>
 
 <pre><code class="r">exp_glm &lt;- DALEX::explain(model_glm, data = titanic, y = titanic$survived)
-</code></pre>
-
-<pre><code>## Preparation of a new explainer is initiated
-##   -&gt; model label       :  lm  ([33mdefault[39m)
-##   -&gt; data              :  2099  rows  9  cols 
-##   -&gt; target variable   :  2099  values 
-##   -&gt; data              :  A column identical to the target variable `y` has been found in the `data`.  ([31mWARNING[39m)
-##   -&gt; data              :  It is highly recommended to pass `data` without the target variable column
-##   -&gt; predict function  :  yhat.glm  will be used ([33mdefault[39m)
-##   -&gt; predicted values  :  numerical, min =  9.814966e-09 , mean =  0.3244402 , max =  1  
-##   -&gt; residual function :  difference between y and yhat ([33mdefault[39m)
-##   -&gt; residuals         :  numerical, min =  -0.9614217 , mean =  -1.68201e-09 , max =  0.9666502  
-## [32mA new explainer has been created![39m
-</code></pre>
-
-<pre><code class="r">exp_svm &lt;- DALEX::explain(model_svm, data = titanic, y = titanic$survived, label = &quot;svm&quot;)
-</code></pre>
-
-<pre><code>## Preparation of a new explainer is initiated
-##   -&gt; model label       :  svm 
-##   -&gt; data              :  2099  rows  9  cols 
-##   -&gt; target variable   :  2099  values 
-##   -&gt; data              :  A column identical to the target variable `y` has been found in the `data`.  ([31mWARNING[39m)
-##   -&gt; data              :  It is highly recommended to pass `data` without the target variable column
-##   -&gt; predict function  :  yhat.svm  will be used ([33mdefault[39m)
-##   -&gt; predicted values  :  numerical, min =  -0.05516344 , mean =  0.2523206 , max =  1.059265  
-##   -&gt; residual function :  difference between y and yhat ([33mdefault[39m)
-##   -&gt; residuals         :  numerical, min =  -1.035725 , mean =  0.0721196 , max =  1.015941  
-## [32mA new explainer has been created![39m
+exp_svm &lt;- DALEX::explain(model_svm, data = titanic, y = titanic$survived, label = &quot;svm&quot;)
 </code></pre>
 
 <p>Second step is creating <code>auditor_model_evaluation</code> object that can be further used for validating a model.</p>
@@ -276,9 +246,13 @@ eva_glm &lt;- model_evaluation(exp_glm)
 eva_svm &lt;- model_evaluation(exp_svm)
 </code></pre>
 
-<h3>Receiver Operating Characteristic (ROC)</h3>
+<h2>Plots</h2>
 
-<p><code>auditor_model_evaluation</code> object can be used for plotting charts.</p>
+<h3>Receiver operating characteristic (ROC)</h3>
+
+<p>Receiver operating characteristic (ROC) curve is a tool for visualising a classifier’s performance. It answers the question of how well the model discriminates between the two classes. The boundary between classes is determined by a threshold value. ROC illustrates the performance of a classification model at various threshold settings. </p>
+
+<p>The diagonal line <code>y = x</code> corresponds to a classifier that randomly guess the positive class half the time. Any model that appears in the lower right part of plot performs worse than random guessing. The closer the curve is to the the left border and top border of plot, the more accurate the classifier is.</p>
 
 <pre><code class="r">plot(eva_glm, eva_svm, type = &quot;roc&quot;)
 </code></pre>
@@ -289,7 +263,11 @@ eva_svm &lt;- model_evaluation(exp_svm)
 # plot_roc(eva_glm, eva_svm)
 </code></pre>
 
-<h3>LIFT Chart</h3>
+<h3>LIFT chart</h3>
+
+<p>The LIFT chart is a rate of positive prediction (<em>RPP</em>) plotted against true positive (<em>TP</em>) on a threshold <em>t</em>.</p>
+
+<p>The chart illustrates varying performance of the model for different thresholds. A random and ideal models are represented by dashed curves (lower and upper respectively). The closer the LIFT curve gets to the upper dashed curve (ideal model), the better a model is.</p>
 
 <pre><code class="r">plot(eva_glm, eva_svm, type = &quot;lift&quot;)
 </code></pre>
@@ -300,15 +278,15 @@ eva_svm &lt;- model_evaluation(exp_svm)
 # plot_lift(eva_glm, eva_svm)
 </code></pre>
 
-<h1>Other methods</h1>
+<h2>Other methods</h2>
 
 <p>Other methods and plots are described in vignettes: </p>
 
 <ul>
-<li><p><a href="https://modeloriented.github.io/auditor/articles/model_residuals_audit.html">Model Residuals audit</a></p></li>
-<li><p><a href="https://modeloriented.github.io/auditor/articles/model_fit_audit.html">Model Fit audit</a></p></li>
-<li><p><a href="https://modeloriented.github.io/auditor/articles/model_performance_audit.html">Model Performance audit</a></p></li>
-<li><p><a href="https://modeloriented.github.io/auditor/articles/observation_influence_audit.html">Observation Influence audit</a></p></li>
+<li><a href="https://modeloriented.github.io/auditor/articles/model_residuals_audit.html">Model residuals audit</a></li>
+<li><a href="https://modeloriented.github.io/auditor/articles/model_fit_audit.html">Model fit audit</a></li>
+<li><a href="https://modeloriented.github.io/auditor/articles/model_performance_audit.html">Model performance audit</a></li>
+<li><a href="https://modeloriented.github.io/auditor/articles/observation_influence_audit.html">Observation influence audit</a></li>
 </ul>
 
 </body>
