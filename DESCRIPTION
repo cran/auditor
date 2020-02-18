@@ -1,12 +1,13 @@
 Package: auditor
 Title: Model Audit - Verification, Validation, and Error Analysis
-Version: 1.1.0
+Version: 1.2.0
 Authors@R: c(
-    person("Alicja", "Gosiewska", , "alicjagosiewska@gmail.com", role = c("aut", "cre"),
+    person("Alicja", "Gosiewska", email = "alicjagosiewska@gmail.com", role = c("aut", "cre"),
       comment = c(ORCID = "0000-0001-6563-5742")),
     person("Przemyslaw", "Biecek", role =  c("aut", "ths"),
       comment = c(ORCID = "0000-0001-8423-1823")),
-    person("Hubert", "Baniecki", role =  c("aut")),
+    person("Hubert", "Baniecki", role =  c("aut"),
+      comment = c(ORCID = "0000-0001-6661-5364")),
     person("Tomasz", "Mikołajczyk", role =  c("aut")),
     person("Michal", "Burdukiewicz", role =  c("ctb")),
     person("Szymon", "Maksymiuk", role =  c("ctb"))
@@ -26,13 +27,13 @@ VignetteBuilder: knitr
 URL: https://github.com/ModelOriented/auditor
 BugReports: https://github.com/ModelOriented/auditor/issues
 NeedsCompilation: no
-Packaged: 2019-09-24 06:31:41 UTC; user
+Packaged: 2020-02-18 10:10:05 UTC; user
 Author: Alicja Gosiewska [aut, cre] (<https://orcid.org/0000-0001-6563-5742>),
   Przemyslaw Biecek [aut, ths] (<https://orcid.org/0000-0001-8423-1823>),
-  Hubert Baniecki [aut],
+  Hubert Baniecki [aut] (<https://orcid.org/0000-0001-6661-5364>),
   Tomasz Mikołajczyk [aut],
   Michal Burdukiewicz [ctb],
   Szymon Maksymiuk [ctb]
 Maintainer: Alicja Gosiewska <alicjagosiewska@gmail.com>
 Repository: CRAN
-Date/Publication: 2019-09-24 07:20:06 UTC
+Date/Publication: 2020-02-18 10:40:02 UTC
