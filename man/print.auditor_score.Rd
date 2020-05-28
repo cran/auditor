@@ -15,13 +15,15 @@
 Prints of Models Scores
 }
 \examples{
-titanic <- na.omit(DALEX::titanic)
-titanic$survived <- titanic$survived == "yes"
+data(titanic_imputed, package = "DALEX")
+
 # fit a model
-model_glm <- glm(survived ~ ., family = binomial, data = titanic)
-# create an explainer
-exp_glm <- DALEX::explain(model_glm, y = titanic$survived)
+model_glm <- glm(survived ~ ., family = binomial, data = titanic_imputed)
+
+glm_audit <- audit(model_glm,
+                   data = titanic_imputed,
+                   y = titanic_imputed$survived)
 # calculate score
-score(exp_glm, type = "auc")
+score(glm_audit, type = "auc")
 
 }

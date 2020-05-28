@@ -5,11 +5,23 @@
 \alias{plotD3CooksDistance}
 \title{Influence of observations Plot in D3 with r2d3 package.}
 \usage{
-plotD3_cooksdistance(object, ..., nlabel = 3, single_plot = FALSE,
-  scale_plot = FALSE, background = FALSE)
+plotD3_cooksdistance(
+  object,
+  ...,
+  nlabel = 3,
+  single_plot = FALSE,
+  scale_plot = FALSE,
+  background = FALSE
+)
 
-plotD3CooksDistance(object, ..., nlabel = 3, single_plot = FALSE,
-  scale_plot = FALSE, background = FALSE)
+plotD3CooksDistance(
+  object,
+  ...,
+  nlabel = 3,
+  single_plot = FALSE,
+  scale_plot = FALSE,
+  background = FALSE
+)
 }
 \arguments{
 \item{object}{An object of class 'auditor_model_cooksdistance' created with \code{\link{model_cooksdistance}} function.}
@@ -25,7 +37,7 @@ plotD3CooksDistance(object, ..., nlabel = 3, single_plot = FALSE,
 \item{background}{Logical, available only if single_plot = FALSE. Indicates whenever backgroud plots should be plotted. By default it's FALSE.}
 }
 \value{
-a `r2d3` object.
+a \code{r2d3} object
 }
 \description{
 Plot of Cook’s distances used for estimate the influence of an single observation.
@@ -47,12 +59,10 @@ dragons <- DALEX::dragons[1:100, ]
 # fit a model
 model_lm <- lm(life_length ~ ., data = dragons)
 
-# use DALEX package to wrap up a model into explainer
-exp_lm <- DALEX::explain(model_lm, data = dragons, y = dragons$life_length)
+lm_audit <- audit(model_lm, data = dragons, y = dragons$life_length)
 
 # validate a model with auditor
-library(auditor)
-cd_lm <- model_cooksdistance(exp_lm)
+cd_lm <- model_cooksdistance(lm_audit)
 
 # plot results
 plotD3_cooksdistance(cd_lm, nlabel = 5)

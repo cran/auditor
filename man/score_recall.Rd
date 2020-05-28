@@ -4,14 +4,19 @@
 \alias{score_recall}
 \title{Recall}
 \usage{
-score_recall(object, cutoff = 0.5, data = NULL, ...)
+score_recall(object, cutoff = 0.5, data = NULL, y = NULL, ...)
 }
 \arguments{
-\item{object}{An object of class \code{explainer} created with function \code{\link[DALEX]{explain}} from the DALEX package.}
+\item{object}{An object of class \code{explainer} created with function
+\code{\link[DALEX]{explain}} from the DALEX package.}
 
-\item{cutoff}{Treshold value, which divides model predicted values (y_hat) to calculate confusion matrix. By default it's \code{0.5}.}
+\item{cutoff}{Treshold value, which divides model predicted values (y_hat) to calculate confusion matrix.
+By default it's \code{0.5}.}
 
-\item{data}{New data that will be used to calcuate the score. Pass \code{NULL} if you want to use \code{data} from \code{object}.}
+\item{data}{New data that will be used to calcuate the score.
+Pass \code{NULL} if you want to use \code{data} from \code{object}.}
+
+\item{y}{New y parameter will be used to calculate score.}
 
 \item{...}{Other arguments dependent on the type of score.}
 }
@@ -22,17 +27,18 @@ An object of class \code{auditor_score}.
 Recall
 }
 \examples{
-titanic <- na.omit(DALEX::titanic)
-titanic$survived <- titanic$survived == "yes"
+data(titanic_imputed, package = "DALEX")
 
 # fit a model
-model_glm <- glm(survived ~ ., family = binomial, data = titanic)
+model_glm <- glm(survived ~ ., family = binomial, data = titanic_imputed)
 
-#create an explainer
-exp_glm <- DALEX::explain(model_glm, y = titanic$survived)
+# create an explainer
+glm_audit <- audit(model_glm,
+                   data = titanic_imputed,
+                   y = titanic_imputed$survived)
 
 # calculate score
-score_recall(exp_glm)
+score_recall(glm_audit)
 
 
 }

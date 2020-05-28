@@ -10,9 +10,9 @@ plot_autocorrelation(object, ..., variable = "_y_hat_", smooth = FALSE)
 plotAutocorrelation(object, ..., variable, smooth = FALSE)
 }
 \arguments{
-\item{object}{An object of class 'auditor_model_residual' created with \code{\link{model_residual}} function.}
+\item{object}{An object of class \code{auditor_model_residual} created with \code{\link{model_residual}} function.}
 
-\item{...}{Other 'auditor_model_residual' objects to be plotted together.}
+\item{...}{Other \code{auditor_model_residual} objects to be plotted together.}
 
 \item{variable}{Name of variable to order residuals on a plot.
 If \code{variable="_y_"}, the data is ordered by a vector of actual response (\code{y} parameter
@@ -32,12 +32,10 @@ dragons <- DALEX::dragons[1:100, ]
 # fit a model
 model_lm <- lm(life_length ~ ., data = dragons)
 
-# use DALEX package to wrap up a model into explainer
-exp_lm <- DALEX::explain(model_lm, data = dragons, y = dragons$life_length)
+lm_audit <- audit(model_lm, data = dragons, y = dragons$life_length)
 
 # validate a model with auditor
-library(auditor)
-mr_lm <- model_residual(exp_lm)
+mr_lm <- model_residual(lm_audit)
 
 # plot results
 plot_autocorrelation(mr_lm)

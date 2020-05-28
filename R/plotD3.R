@@ -5,16 +5,16 @@
 #' \code{\link{model_cooksdistance}}, \code{\link{model_evaluation}}, \code{\link{model_performance}},
 #' \code{\link{model_evaluation}}.
 #'
-#' @param x object of class 'auditor_model_residual' (created with \code{\link{model_residual}} function),
-#' 'auditor_model_performance' (created with \code{\link{model_performance}} function),
-#' 'auditor_model_evaluation' (created with \code{\link{model_evaluation}} function),
-#' 'auditor_model_cooksdistance' (created with \code{\link{model_cooksdistance}} function),
-#' or 'auditor_model_halfnormal' (created with \code{\link{model_halfnormal}} function).
-#' @param ... other arguments dependent on the type of plot or additionl objects of classes 'auditor_model_residual',
-#' 'auditor_model_performance', 'auditor_model_evaluation', 'auditor_model_cooksdistance', 'auditor_model_halfnormal'.
+#' @param x object of class \code{auditor_model_residual} (created with \code{\link{model_residual}} function),
+#' \code{auditor_model_performance} (created with \code{\link{model_performance}} function),
+#' \code{auditor_model_evaluation} (created with \code{\link{model_evaluation}} function),
+#' \code{auditor_model_cooksdistance} (created with \code{\link{model_cooksdistance}} function),
+#' or \code{auditor_model_halfnormal} (created with \code{\link{model_halfnormal}} function).
+#' @param ... other arguments dependent on the type of plot or additionl objects of classes \code{'auditor_model_residual',
+#' 'auditor_model_performance', 'auditor_model_evaluation', 'auditor_model_cooksdistance', 'auditor_model_halfnormal'}.
 #' @param type the type of plot. Single character. Possible values:
-#' 'acf', 'autocorrelation', 'cooksdistance', 'halfnormal','lift', 'prediction', 'rec', 'resiual',
-#' 'roc', 'rroc', 'scalelocation', (for detailed description see corresponding functions in see also section).
+#' \code{'acf', 'autocorrelation', 'cooksdistance', 'halfnormal','lift', 'prediction', 'rec', 'resiual',
+#' 'roc', 'rroc', 'scalelocation'}, (for detailed description see corresponding functions in see also section).
 #'
 #' @seealso \code{\link{plotD3_acf}, \link{plotD3_autocorrelation}, \link{plotD3_cooksdistance},
 #' \link{plotD3_halfnormal}, \link{plotD3_residual}, \link{plotD3_lift},
@@ -27,24 +27,21 @@
 #' # fit a model
 #' model_lm <- lm(life_length ~ ., data = dragons)
 #'
-#' # use DALEX package to wrap up a model into explainer
-#' exp_lm <- DALEX::explain(model_lm, data = dragons, y = dragons$life_length)
+#' lm_audit <- audit(model_lm, data = dragons, y = dragons$life_length)
 #'
 #' # validate a model with auditor
-#' library(auditor)
-#' mr_lm <- model_residual(exp_lm)
+#' mr_lm <- model_residual(lm_audit)
 #'
 #' # plot results
 #' plotD3(mr_lm)
 #' plotD3(mr_lm, type = "prediction")
 #'
-#' hn_lm <- model_halfnormal(exp_lm)
+#' hn_lm <- model_halfnormal(lm_audit)
 #' plotD3(hn_lm)
 #'
 #'
 #' @importFrom grDevices devAskNewPage
 #' @importFrom graphics plot
-#' @importFrom gridExtra grid.arrange
 #'
 #' @export
 #' @rdname plotD3

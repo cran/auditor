@@ -20,7 +20,7 @@
 #' @param background Logical, available only if single_plot = FALSE. Indicates whenever backgroud plots should be plotted.
 #'  By default it's FALSE.
 #'
-#' @return a `r2d3` object.
+#' @return a \code{r2d3} object
 #'
 #' @examples
 #' dragons <- DALEX::dragons[1:100, ]
@@ -29,19 +29,18 @@
 #' model_lm <- lm(life_length ~ ., data = dragons)
 #'
 #' # use DALEX package to wrap up a model into explainer
-#' exp_lm <- DALEX::explain(model_lm, data = dragons, y = dragons$life_length)
+#' lm_audit <- audit(model_lm, data = dragons, y = dragons$life_length)
 #'
 #' # validate a model with auditor
-#' library(auditor)
-#' mr_lm <- model_residual(exp_lm)
+#' mr_lm <- model_residual(lm_audit)
 #'
 #' # plot results
 #' plotD3_residual(mr_lm)
 #'
 #' library(randomForest)
 #' model_rf <- randomForest(life_length~., data = dragons)
-#' exp_rf <- DALEX::explain(model_rf, data = dragons, y = dragons$life_length)
-#' mr_rf <- model_residual(exp_rf)
+#' rf_audit <- audit(model_rf, data = dragons, y = dragons$life_length)
+#' mr_rf <- model_residual(rf_audit)
 #' plotD3_residual(mr_lm, mr_rf)
 #'
 #' @seealso \code{\link{plot_residual}}
@@ -186,7 +185,7 @@ plotD3_residual <- function(object, ..., variable = '_y_', points = TRUE, smooth
 plotD3Residual <- function(object, ..., variable = NULL, points = TRUE, smooth = FALSE,
                            std_residuals = FALSE,point_count = NULL, single_plot = TRUE,
                            scale_plot = FALSE, background = FALSE){
-  message("Please note that 'plotD3Residual()' is now deprecated, it is better to use 'plotD3_residual()' instead.")
+  warning("Please note that 'plotD3Residual()' is now deprecated, it is better to use 'plotD3_residual()' instead.")
   plotD3_residual(object, ..., variable, points, smooth,
                   std_residuals, point_count, single_plot,
                   scale_plot, background)

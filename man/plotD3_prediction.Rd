@@ -5,13 +5,31 @@
 \alias{plotD3Prediction}
 \title{Plot Prediction vs Target, Observed or Variable Values in D3 with r2d3 package.}
 \usage{
-plotD3_prediction(object, ..., variable = "_y_", points = TRUE,
-  smooth = FALSE, abline = FALSE, point_count = NULL,
-  single_plot = TRUE, scale_plot = FALSE, background = FALSE)
+plotD3_prediction(
+  object,
+  ...,
+  variable = "_y_",
+  points = TRUE,
+  smooth = FALSE,
+  abline = FALSE,
+  point_count = NULL,
+  single_plot = TRUE,
+  scale_plot = FALSE,
+  background = FALSE
+)
 
-plotD3Prediction(object, ..., variable = NULL, points = TRUE,
-  smooth = FALSE, abline = FALSE, point_count = NULL,
-  single_plot = TRUE, scale_plot = FALSE, background = FALSE)
+plotD3Prediction(
+  object,
+  ...,
+  variable = NULL,
+  points = TRUE,
+  smooth = FALSE,
+  abline = FALSE,
+  point_count = NULL,
+  single_plot = TRUE,
+  scale_plot = FALSE,
+  background = FALSE
+)
 }
 \arguments{
 \item{object}{An object of class 'auditor_model_residual.}
@@ -41,7 +59,7 @@ with \code{variable = NULL} which is a default option.}
 By default it's FALSE.}
 }
 \value{
-a `r2d3` object.
+a \code{r2d3} object
 }
 \description{
 Function \code{plotD3_prediction} plots predicted values observed or variable values in the model.
@@ -53,12 +71,10 @@ dragons <- DALEX::dragons[1:100, ]
 # fit a model
 model_lm <- lm(life_length ~ ., data = dragons)
 
-# use DALEX package to wrap up a model into explainer
-exp_lm <- DALEX::explain(model_lm, data = dragons, y = dragons$life_length)
+lm_audit <- audit(model_lm, data = dragons, y = dragons$life_length)
 
 # validate a model with auditor
-library(auditor)
-mr_lm <- model_residual(exp_lm)
+mr_lm <- model_residual(lm_audit)
 
 # plot results
 plotD3_prediction(mr_lm, abline = TRUE)
@@ -66,8 +82,8 @@ plotD3_prediction(mr_lm, variable = "height", smooth = TRUE)
 
 library(randomForest)
 model_rf <- randomForest(life_length~., data = dragons)
-exp_rf <- DALEX::explain(model_rf, data = dragons, y = dragons$life_length)
-mr_rf <- model_residual(exp_rf)
+rf_audit <- audit(model_rf, data = dragons, y = dragons$life_length)
+mr_rf <- model_residual(rf_audit)
 plotD3_prediction(mr_lm, mr_rf, variable = "weight", smooth = TRUE)
 
 }

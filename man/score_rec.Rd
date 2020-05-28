@@ -5,14 +5,18 @@
 \alias{scoreREC}
 \title{Area Over the Curve for REC Curves}
 \usage{
-score_rec(object, data = NULL, ...)
+score_rec(object, data = NULL, y = NULL, ...)
 
 scoreREC(object)
 }
 \arguments{
-\item{object}{An object of class \code{explainer} created with function \code{\link[DALEX]{explain}} from the DALEX package.}
+\item{object}{An object of class \code{explainer} created with function
+\code{\link[DALEX]{explain}} from the DALEX package.}
 
-\item{data}{New data that will be used to calcuate the score. Pass \code{NULL} if you want to use \code{data} from \code{object}.}
+\item{data}{New data that will be used to calcuate the score.
+Pass \code{NULL} if you want to use \code{data} from \code{object}.}
+
+\item{y}{New y parameter will be used to calculate score.}
 
 \item{...}{Other arguments dependent on the type of score.}
 }
@@ -30,15 +34,16 @@ dragons <- DALEX::dragons[1:100, ]
 lm_model <- lm(life_length ~ ., data = dragons)
 
 # create an explainer
-lm_exp <- DALEX::explain(lm_model, data = dragons, y = dragons$life_length)
+lm_audit <- audit(lm_model, data = dragons, y = dragons$life_length)
 
 # calculate score
-score_rec(lm_exp)
+score_rec(lm_audit)
 
 
 }
 \references{
-J. Bi, and K. P. Bennet, "Regression error characteristic curves," in Proc. 20th Int. Conf. Machine Learning, Washington DC, 2003, pp. 43-50
+J. Bi, and K. P. Bennet, "Regression error characteristic curves,"
+ in Proc. 20th Int. Conf. Machine Learning, Washington DC, 2003, pp. 43-50
 }
 \seealso{
 \code{\link{plot_rec}}

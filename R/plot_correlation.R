@@ -4,8 +4,8 @@
 #' on the diagonal there are density plots of fitted values (alternatively residuals), in the right-top triangle
 #' there are correlations between fitte dvalues (alternatively residuals).
 #'
-#' @param object An object of class 'auditor_model_residual' created with \code{\link{model_residual}} function.
-#' @param ... Other 'auditor_model_residual' objects to be plotted together.
+#' @param object An object of class \code{auditor_model_residual} created with \code{\link{model_residual}} function.
+#' @param ... Other \code{auditor_model_residual} objects to be plotted together.
 #' @param values "fit" for model fitted values or "res" for residual values.
 #'
 #' @return Invisibly returns a \code{\link[gtable]{gtable}} object.
@@ -17,24 +17,21 @@
 #' model_lm <- lm(life_length ~ ., data = dragons)
 #'
 #' # use DALEX package to wrap up a model into explainer
-#' exp_lm <- DALEX::explain(model_lm, data = dragons, y = dragons$life_length)
+#' lm_audit <- audit(model_lm, data = dragons, y = dragons$life_length)
 #'
 #' # validate a model with auditor
-#' library(auditor)
-#' mr_lm <- model_residual(exp_lm)
+#' mr_lm <- model_residual(lm_audit)
 #'
 #' library(randomForest)
 #' model_rf <- randomForest(life_length~., data = dragons)
-#' exp_rf <- DALEX::explain(model_rf, data = dragons, y = dragons$life_length)
-#' mr_rf <- model_residual(exp_rf)
+#' rf_audit <- audit(model_rf, data = dragons, y = dragons$life_length)
+#' mr_rf <- model_residual(rf_audit)
 #'
 #' # plot results
 #' plot_correlation(mr_lm, mr_rf)
 #' plot(mr_lm, mr_rf, type = "correlation")
 #'
 #'
-#' @import grid
-#' @import gridExtra
 #' @importFrom stats cor
 #' @importFrom utils combn
 #'
@@ -87,6 +84,6 @@ plot_correlation <- function(object, ..., values = "fit") {
 #' @rdname plot_correlation
 #' @export
 plotModelCorrelation <- function(object, ..., values = "fit") {
-  message("Please note that 'plotModelCorrelation()' is now deprecated, it is better to use 'plot_correlation()' instead.")
+  warning("Please note that 'plotModelCorrelation()' is now deprecated, it is better to use 'plot_correlation()' instead.")
   plot_correlation(object, ..., values)
 }

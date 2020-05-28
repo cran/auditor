@@ -3,8 +3,8 @@
 #' @description LIFT is a plot of the rate of positive prediction against true positive rate for the different thresholds.
 #' It is useful for measuring and comparing the accuracy of the classificators.
 #'
-#' @param object An object of class 'auditor_model_evaluation' created with \code{\link{model_evaluation}} function.
-#' @param ... Other 'auditor_model_evaluation' objects to be plotted together.
+#' @param object An object of class \code{auditor_model_evaluation} created with \code{\link{model_evaluation}} function.
+#' @param ... Other \code{auditor_model_evaluation} objects to be plotted together.
 #' @param zeros Logical. It makes the lines start from the \code{(0,0)} point. By default it's \code{TRUE}.
 #'
 #' @return A ggplot object.
@@ -12,32 +12,32 @@
 #' @seealso \code{\link{model_evaluation}}
 #'
 #' @examples
-#' titanic <- na.omit(DALEX::titanic)
-#' titanic$survived <- titanic$survived == "yes"
+#' data(titanic_imputed, package = "DALEX")
 #'
 #' # fit a model
-#' model_glm <- glm(survived ~ ., family = binomial, data = titanic)
+#' model_glm <- glm(survived ~ ., family = binomial, data = titanic_imputed)
 #'
-#' # use DALEX package to wrap up a model into explainer
-#' exp_glm <- DALEX::explain(model_glm, data = titanic, y = titanic$survived)
+#' glm_audit <- audit(model_glm,
+#'                    data = titanic_imputed,
+#'                    y = titanic_imputed$survived)
 #'
 #' # validate a model with auditor
-#' library(auditor)
-#' eva_glm <- model_evaluation(exp_glm)
+#' eva_glm <- model_evaluation(glm_audit)
 #'
 #' # plot results
 #' plot_lift(eva_glm)
 #' plot(eva_glm, type ="lift")
 #'
-#' model_glm_2 <- glm(survived ~ .-age, family = binomial, data = titanic)
-#' exp_glm_2 <- DALEX::explain(model_glm_2, data = titanic, y = titanic$survived, label = "glm2")
-#' eva_glm_2 <- model_evaluation(exp_glm_2)
+#' model_glm_2 <- glm(survived ~ .-age, family = binomial, data = titanic_imputed)
+#' glm_audit_2 <- audit(model_glm_2,
+#'                      data = titanic_imputed,
+#'                      y = titanic_imputed$survived,
+#'                      label = "glm2")
+#' eva_glm_2 <- model_evaluation(glm_audit_2)
 #'
 #' plot_lift(eva_glm, eva_glm_2)
 #' plot(eva_glm, eva_glm_2, type = "lift")
 #'
-#'
-#' @import ggplot2
 #'
 #' @export
 plot_lift <- function(object, ..., zeros = TRUE) {
@@ -75,7 +75,8 @@ plot_lift <- function(object, ..., zeros = TRUE) {
   df1$`_ord_` <- 100 - as.numeric(df1$`_label_`)
 
   # prepare data frame for ideal and dummy model
-  pr <- sum(object$`_y_` == levels(factor(object$`_y_`))[2]) / length(object$`_y_`)
+  pr <- sum(object$`_y_` == levels(factor(object$`_y_`))[3]) / length(object$`_y_`)
+
 
   ideal_df <- data.frame(rpp = c(0, pr, 1),
                          tp = c(0, max(df1$`_tp_`), max(df1$`_tp_`)),
@@ -100,7 +101,7 @@ plot_lift <- function(object, ..., zeros = TRUE) {
   p <- ggplot(df, aes(x = `_rpp_`, y = `_tp_`)) +
     geom_line(aes(color = `_label_`,
               group = factor(`_ord_`),
-              linetype = df$line)) +
+              linetype = `line`)) +
     xlab("Rate of positive prediction") +
     ylab("True positive") +
     ggtitle("LIFT Chart") +
@@ -114,7 +115,7 @@ plot_lift <- function(object, ..., zeros = TRUE) {
   # theme and colours
   p <- p + theme_drwhy() +
     scale_color_manual(values = c(rev(colours), "#4378bf", "#ae2c87"),
-                       breaks = levels(df1$`_label_`),
+                       breaks = levels(`_label_`),
                        guide = guide_legend(nrow = 1)) +
     theme(plot.margin = unit(c(0, 0.5, 0, 0), "cm"),
           plot.title = element_text(margin = margin(b = 10)),
@@ -128,6 +129,6 @@ plot_lift <- function(object, ..., zeros = TRUE) {
 #' @rdname plot_lift
 #' @export
 plotLIFT <- function(object, ...) {
-  message("Please note that 'plotLIFT()' is now deprecated, it is better to use 'plot_lift()' instead.")
+  warning("Please note that 'plotLIFT()' is now deprecated, it is better to use 'plot_lift()' instead.")
   plot_lift(object, ...)
 }

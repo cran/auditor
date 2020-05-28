@@ -5,14 +5,18 @@
 \alias{scoreRMSE}
 \title{Root Mean Square Error}
 \usage{
-score_rmse(object, data = NULL, ...)
+score_rmse(object, data = NULL, y = NULL, ...)
 
 scoreRMSE(object)
 }
 \arguments{
-\item{object}{An object of class \code{explainer} created with function \code{\link[DALEX]{explain}} from the DALEX package.}
+\item{object}{An object of class \code{explainer} created with function
+\code{\link[DALEX]{explain}} from the DALEX package.}
 
-\item{data}{New data that will be used to calcuate the score. Pass \code{NULL} if you want to use \code{data} from \code{object}.}
+\item{data}{New data that will be used to calcuate the score.
+Pass \code{NULL} if you want to use \code{data} from \code{object}.}
+
+\item{y}{New y parameter will be used to calculate score.}
 
 \item{...}{Other arguments dependent on the type of score.}
 }
@@ -29,10 +33,10 @@ dragons <- DALEX::dragons[1:100, ]
 model_lm <- lm(life_length ~ ., data = dragons)
 
 # create an explainer
-exp_lm <- DALEX::explain(model_lm, data = dragons, y = dragons$life_length)
+lm_audit <- audit(model_lm, data = dragons, y = dragons$life_length)
 
 # calculate score
-score_rmse(exp_lm)
+score_rmse(lm_audit)
 
 
 }

@@ -6,8 +6,8 @@
 #' Points on the plot correspond to ordered absolute values of model diagnostic
 #' (i.e. standardized residuals) plotted against theoretical order statistics from a half-normal distribution.
 #'
-#' @param object An object of class 'auditor_model_halfnormal' created with \code{\link{model_halfnormal}} function.
-#' @param ... Other 'auditor_model_halfnormal' objects.
+#' @param object An object of class \code{auditor_model_halfnormal} created with \code{\link{model_halfnormal}} function.
+#' @param ... Other \code{auditor_model_halfnormal} objects.
 #' @param quantiles If TRUE values on axis are on quantile scale.
 #' @param sim Number of residuals to simulate.
 #'
@@ -21,19 +21,16 @@
 #' # fit a model
 #' model_lm <- lm(life_length ~ ., data = dragons)
 #'
-#' # use DALEX package to wrap up a model into explainer
-#' exp_lm <- DALEX::explain(model_lm, data = dragons, y = dragons$life_length)
+#' lm_audit <- audit(model_lm, data = dragons, y = dragons$life_length)
 #'
 #' # validate a model with auditor
-#' library(auditor)
-#' hn_lm <- model_halfnormal(exp_lm)
+#' hn_lm <- model_halfnormal(lm_audit)
 #'
 #' # plot results
 #' plot_halfnormal(hn_lm)
 #' plot(hn_lm)
 #'
 #' @import ggplot2
-#' @importFrom hnp hnp
 #' @importFrom stats ecdf dnorm density
 #'
 #' @seealso \code{\link{score_halfnormal}}
@@ -77,6 +74,6 @@ plot_halfnormal <- function(object, ..., quantiles = FALSE, sim = 99) {
 #' @rdname plot_halfnormal
 #' @export
 plotHalfNormal <- function(object, ..., quantiles = FALSE, sim = 99) {
-  message("Please note that 'plotHalfNormal()' is now deprecated, it is better to use 'plot_halfnormal()' instead.")
+  warning("Please note that 'plotHalfNormal()' is now deprecated, it is better to use 'plot_halfnormal()' instead.")
   plot_halfnormal(object, ..., quantiles = quantiles, sim = sim)
 }

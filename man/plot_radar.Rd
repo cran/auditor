@@ -10,17 +10,18 @@ plot_radar(object, ..., verbose = TRUE)
 plotModelRanking(object, ..., verbose = TRUE)
 }
 \arguments{
-\item{object}{An object of class 'auditor_model_performance' created with \code{\link{model_performance}} function.}
+\item{object}{An object of class \code{auditor_model_performance} created with \code{\link{model_performance}} function.}
 
-\item{...}{Other auditor_model_performance' objects to be plotted together.}
+\item{...}{Other \code{auditor_model_performance} objects to be plotted together.}
 
 \item{verbose}{Logical, indicates whether values of scores should be printed.}
 }
 \value{
-ggplot object
+A ggplot object.
 }
 \description{
-Radar plot with model score. score are scaled to [0,1], each score is inversed and divided by maximum score value.
+Radar plot with model score. score are scaled to \code{[0,1]},
+each score is inversed and divided by maximum score value.
 }
 \examples{
 dragons <- DALEX::dragons[1:100, ]
@@ -28,18 +29,16 @@ dragons <- DALEX::dragons[1:100, ]
 # fit a model
 model_lm <- lm(life_length ~ ., data = dragons)
 
-# use DALEX package to wrap up a model into explainer
-exp_lm <- DALEX::explain(model_lm, data = dragons, y = dragons$life_length)
+lm_audit <- audit(model_lm, data = dragons, y = dragons$life_length)
 
 # validate a model with auditor
-library(auditor)
-mp_lm <- model_performance(exp_lm)
+mp_lm <- model_performance(lm_audit)
 
 
 library(randomForest)
 model_rf <- randomForest(life_length~., data = dragons)
-exp_rf <- DALEX::explain(model_rf, data = dragons, y = dragons$life_length)
-mp_rf <- model_performance(exp_rf)
+rf_audit <- audit(model_rf, data = dragons, y = dragons$life_length)
+mp_rf <- model_performance(rf_audit)
 
 # plot results
 plot_radar(mp_lm, mp_rf)

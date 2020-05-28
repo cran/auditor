@@ -5,16 +5,20 @@
 \alias{scorePeak}
 \title{Peak Score}
 \usage{
-score_peak(object, variable = NULL, data = NULL, ...)
+score_peak(object, variable = NULL, data = NULL, y = NULL, ...)
 
 scorePeak(object)
 }
 \arguments{
-\item{object}{An object of class \code{explainer} created with function \code{\link[DALEX]{explain}} from the DALEX package.}
+\item{object}{An object of class \code{explainer} created with function
+\code{\link[DALEX]{explain}} from the DALEX package.}
 
 \item{variable}{Name of model variable to order residuals.}
 
-\item{data}{New data that will be used to calcuate the score. Pass \code{NULL} if you want to use \code{data} from \code{object}.}
+\item{data}{New data that will be used to calcuate the score.
+Pass \code{NULL} if you want to use \code{data} from \code{object}.}
+
+\item{y}{New y parameter will be used to calculate score.}
 
 \item{...}{Other arguments dependent on the type of score.}
 }
@@ -22,7 +26,8 @@ scorePeak(object)
 An object of class \code{auditor_score}.
 }
 \description{
-This score is calculated on the basis of Peak test, which is used for checking for homoscedasticity of residuals in regression analyses.
+This score is calculated on the basis of Peak test,
+ which is used for checking for homoscedasticity of residuals in regression analyses.
 }
 \examples{
 dragons <- DALEX::dragons[1:100, ]
@@ -31,9 +36,9 @@ dragons <- DALEX::dragons[1:100, ]
 model_lm <- lm(life_length ~ ., data = dragons)
 
 # create an explainer
-exp_lm <- DALEX::explain(model_lm, data = dragons, y = dragons$life_length)
+lm_audit <- audit(model_lm, data = dragons, y = dragons$life_length)
 
 # calculate score
-score_peak(exp_lm)
+score_peak(lm_audit)
 
 }

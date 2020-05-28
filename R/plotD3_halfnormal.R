@@ -12,7 +12,7 @@
 #' @param sim Number of residuals to simulate.
 #' @param scale_plot Logical, indicates whenever the plot should scale with height. By default it's FALSE.
 #'
-#' @return a `r2d3` object.
+#' @return a \code{r2d3} object
 #'
 #' @seealso \code{\link{model_halfnormal}}
 #'
@@ -22,17 +22,14 @@
 #' # fit a model
 #' model_lm <- lm(life_length ~ ., data = dragons)
 #'
-#' # use DALEX package to wrap up a model into explainer
-#' exp_lm <- DALEX::explain(model_lm, data = dragons, y = dragons$life_length)
+#' lm_audit <- audit(model_lm, data = dragons, y = dragons$life_length)
 #'
 #' # validate a model with auditor
-#' library(auditor)
-#' hn_lm <- model_halfnormal(exp_lm)
+#' hn_lm <- model_halfnormal(lm_audit)
 #'
 #' # plot results
 #' plotD3_halfnormal(hn_lm)
 #'
-#' @importFrom hnp hnp
 #' @importFrom stats ecdf dnorm density
 #'
 #' @seealso \code{\link{score_halfnormal}, \link{plot_halfnormal}}
@@ -89,6 +86,6 @@ plotD3_halfnormal <- function(object, ..., quantiles = FALSE, sim = 99, scale_pl
 #' @rdname plotD3_halfnormal
 #' @export
 plotD3HalfNormal <- function(object, ..., quantiles = FALSE, sim = 99, scale_plot = FALSE) {
-  message("Please note that 'plotD3HalfNormal()' is now deprecated, it is better to use 'plotD3_halfnormal()' instead.")
+  warning("Please note that 'plotD3HalfNormal()' is now deprecated, it is better to use 'plotD3_halfnormal()' instead.")
   plotD3_halfnormal(object, ..., quantiles, sim, scale_plot)
 }

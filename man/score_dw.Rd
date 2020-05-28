@@ -5,16 +5,20 @@
 \alias{scoreDW}
 \title{Durbin-Watson Score}
 \usage{
-score_dw(object, variable = NULL, data = NULL, ...)
+score_dw(object, variable = NULL, data = NULL, y = NULL, ...)
 
 scoreDW(object, variable = NULL)
 }
 \arguments{
-\item{object}{An object of class \code{explainer} created with function \code{\link[DALEX]{explain}} from the DALEX package.}
+\item{object}{An object of class \code{explainer} created with function
+\code{\link[DALEX]{explain}} from the DALEX package.}
 
 \item{variable}{Name of model variable to order residuals.}
 
-\item{data}{New data that will be used to calcuate the score. Pass \code{NULL} if you want to use \code{data} from \code{object}.}
+\item{data}{New data that will be used to calcuate the score.
+Pass \code{NULL} if you want to use \code{data} from \code{object}.}
+
+\item{y}{New y parameter will be used to calculate score.}
 
 \item{...}{Other arguments dependent on the type of score.}
 }
@@ -32,11 +36,9 @@ dragons <- DALEX::dragons[1:100, ]
 # fit a model
 model_lm <- lm(life_length ~ ., data = dragons)
 
-# create an explainer
-exp_lm <- DALEX::explain(model_lm, data = dragons, y = dragons$life_length)
+lm_audit <- audit(model_lm, data = dragons, y = dragons$life_length)
 
 # calculate score
-score_dw(exp_lm)
-
+score_dw(lm_audit)
 
 }

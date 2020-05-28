@@ -20,7 +20,7 @@
 #'
 #' @references Cook, R. Dennis (1977). "Detection of Influential Observations in Linear Regression". doi:10.2307/1268249.
 #'
-#' @return a `r2d3` object.
+#' @return a \code{r2d3} object
 #'
 #' @examples
 #'
@@ -29,12 +29,10 @@
 #' # fit a model
 #' model_lm <- lm(life_length ~ ., data = dragons)
 #'
-#' # use DALEX package to wrap up a model into explainer
-#' exp_lm <- DALEX::explain(model_lm, data = dragons, y = dragons$life_length)
+#' lm_audit <- audit(model_lm, data = dragons, y = dragons$life_length)
 #'
 #' # validate a model with auditor
-#' library(auditor)
-#' cd_lm <- model_cooksdistance(exp_lm)
+#' cd_lm <- model_cooksdistance(lm_audit)
 #'
 #' # plot results
 #' plotD3_cooksdistance(cd_lm, nlabel = 5)
@@ -113,7 +111,7 @@ plotD3_cooksdistance <- function(object, ..., nlabel = 3,
 #' @export
 plotD3CooksDistance <- function(object, ..., nlabel = 3,
                     single_plot = FALSE, scale_plot = FALSE, background = FALSE){
-  message("Please note that 'plotD3CooksDistance()' is now deprecated, it is better to use 'plotD3_cooksdistance()' instead.")
+  warning("Please note that 'plotD3CooksDistance()' is now deprecated, it is better to use 'plotD3_cooksdistance()' instead.")
   plotD3_cooksdistance(object, ..., nlabel,
            single_plot, scale_plot, background)
 }

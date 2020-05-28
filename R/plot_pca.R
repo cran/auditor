@@ -3,9 +3,10 @@
 #' @description Principal Component Analysis of models residuals.
 #' PCA can be used to assess the similarity of the models.
 #'
-#' @param object An object of class 'auditor_model_residual' created with \code{\link{model_residual}} function.
-#' @param ... Other 'auditor_model_residual' objects to be plotted together.
+#' @param object An object of class \code{auditor_model_residual} created with \code{\link{model_residual}} function.
+#' @param ... Other \code{auditor_model_residual} objects to be plotted together.
 #' @param scale A logical value indicating whether the models residuals should be scaled before the analysis.
+#' @param arrow_size Width of the arrows.
 #'
 #' @return A ggplot object.
 #'
@@ -15,27 +16,24 @@
 #' # fit a model
 #' model_lm <- lm(life_length ~ ., data = dragons)
 #'
-#' # use DALEX package to wrap up a model into explainer
-#' exp_lm <- DALEX::explain(model_lm, data = dragons, y = dragons$life_length)
+#' lm_audit <- audit(model_lm, data = dragons, y = dragons$life_length)
 #'
 #' # validate a model with auditor
-#' library(auditor)
-#' mr_lm <- model_residual(exp_lm)
+#' mr_lm <- model_residual(lm_audit)
 #'
 #' library(randomForest)
 #' model_rf <- randomForest(life_length~., data = dragons)
-#' exp_rf <- DALEX::explain(model_rf, data = dragons, y = dragons$life_length)
-#' mr_rf <- model_residual(exp_rf)
+#' rf_audit <- audit(model_rf, data = dragons, y = dragons$life_length)
+#' mr_rf <- model_residual(rf_audit)
 #'
 #' # plot results
 #' plot_pca(mr_lm, mr_rf)
 #'
-#' @import ggplot2
 #' @importFrom stats prcomp
 #'
 #' @export
 
-plot_pca <- function(object, ..., scale = TRUE) {
+plot_pca <- function(object, ..., scale = TRUE, arrow_size = 2) {
   # some safeguard
   residuals <- label <- PC1 <- PC2 <- NULL
 
@@ -68,7 +66,7 @@ plot_pca <- function(object, ..., scale = TRUE) {
     geom_hline(aes(yintercept = 0), size = 0.25) +
     geom_vline(aes(xintercept = 0), size = 0.25) +
     geom_line(data = arrows2, aes(PC1, PC2, colour = label)) +
-    geom_segment(data = arrows, aes(x = 0, y = 0, xend = PC1, yend = PC2, colour = label),
+    geom_segment(data = arrows, aes(x = 0, y = 0, xend = PC1, yend = PC2, colour = label), size = arrow_size,
                  arrow = grid::arrow(length = grid::unit(2, "points")), show.legend = FALSE) +
     ggtitle("Model PCA") +
     scale_color_manual(values = rev(colours), breaks = arrows$label, guide = guide_legend(nrow = 1)) +
@@ -79,6 +77,6 @@ plot_pca <- function(object, ..., scale = TRUE) {
 #' @rdname plot_pca
 #' @export
 plotModelPCA <- function(object, ..., scale = TRUE) {
-  message("Please note that 'plotModelPCA()' is now deprecated, it is better to use 'plot_pca()' instead.")
+  warning("Please note that 'plotModelPCA()' is now deprecated, it is better to use 'plot_pca()' instead.")
   plot_pca(object, ..., scale = scale)
 }

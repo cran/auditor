@@ -21,18 +21,14 @@ Currently three tests are performed
  - for trend in residuals as a function of target variable (detection of bias)
 }
 \examples{
-library(DALEX)
 dragons <- DALEX::dragons[1:100, ]
 lm_model <- lm(life_length ~ ., data = dragons)
-lm_exp <- explain(lm_model, data = dragons, y = dragons$life_length)
-library(auditor)
-check_residuals(lm_exp)
+lm_audit <- audit(lm_model, data = dragons, y = dragons$life_length)
+check_residuals(lm_audit)
  \dontrun{
- library("ranger")
- rf_model <- ranger(life_length ~ ., data = dragons)
- predict_function <- function(m,x,...) predict(m, x, ...)$predictions
- rf_exp <- explain(rf_model, data = dragons, y = dragons$life_length,
-           predict_function = predict_function)
- check_residuals(rf_exp)
+ library("randomForest")
+ rf_model <- randomForest(life_length ~ ., data = dragons)
+ rf_audit <- audit(rf_model, data = dragons, y = dragons$life_length)
+ check_residuals(rf_audit)
 }
 }

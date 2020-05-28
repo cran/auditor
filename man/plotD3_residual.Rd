@@ -5,14 +5,32 @@
 \alias{plotD3Residual}
 \title{Plot Residuals vs Observed, Fitted or Variable Values in D3 with r2d3 package.}
 \usage{
-plotD3_residual(object, ..., variable = "_y_", points = TRUE,
-  smooth = FALSE, std_residuals = FALSE, nlabel = 0,
-  point_count = NULL, single_plot = TRUE, scale_plot = FALSE,
-  background = FALSE)
+plotD3_residual(
+  object,
+  ...,
+  variable = "_y_",
+  points = TRUE,
+  smooth = FALSE,
+  std_residuals = FALSE,
+  nlabel = 0,
+  point_count = NULL,
+  single_plot = TRUE,
+  scale_plot = FALSE,
+  background = FALSE
+)
 
-plotD3Residual(object, ..., variable = NULL, points = TRUE,
-  smooth = FALSE, std_residuals = FALSE, point_count = NULL,
-  single_plot = TRUE, scale_plot = FALSE, background = FALSE)
+plotD3Residual(
+  object,
+  ...,
+  variable = NULL,
+  points = TRUE,
+  smooth = FALSE,
+  std_residuals = FALSE,
+  point_count = NULL,
+  single_plot = TRUE,
+  scale_plot = FALSE,
+  background = FALSE
+)
 }
 \arguments{
 \item{object}{An object of class 'auditor_model_residual' created with \code{\link{model_residual}} function.}
@@ -43,7 +61,7 @@ If \code{variable = NULL}, unordered observations are presented.}
 By default it's FALSE.}
 }
 \value{
-a `r2d3` object.
+a \code{r2d3} object
 }
 \description{
 Function \code{plotD3_residual} plots resudial values vs fitted, observed or variable values in the model.
@@ -55,19 +73,18 @@ dragons <- DALEX::dragons[1:100, ]
 model_lm <- lm(life_length ~ ., data = dragons)
 
 # use DALEX package to wrap up a model into explainer
-exp_lm <- DALEX::explain(model_lm, data = dragons, y = dragons$life_length)
+lm_audit <- audit(model_lm, data = dragons, y = dragons$life_length)
 
 # validate a model with auditor
-library(auditor)
-mr_lm <- model_residual(exp_lm)
+mr_lm <- model_residual(lm_audit)
 
 # plot results
 plotD3_residual(mr_lm)
 
 library(randomForest)
 model_rf <- randomForest(life_length~., data = dragons)
-exp_rf <- DALEX::explain(model_rf, data = dragons, y = dragons$life_length)
-mr_rf <- model_residual(exp_rf)
+rf_audit <- audit(model_rf, data = dragons, y = dragons$life_length)
+mr_rf <- model_residual(rf_audit)
 plotD3_residual(mr_lm, mr_rf)
 
 }

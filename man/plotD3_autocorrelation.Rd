@@ -5,13 +5,29 @@
 \alias{plotD3Autocorrelation}
 \title{Autocorrelation Plot in D3 with r2d3 package.}
 \usage{
-plotD3_autocorrelation(object, ..., variable = NULL, points = TRUE,
-  smooth = FALSE, point_count = NULL, single_plot = TRUE,
-  scale_plot = FALSE, background = FALSE)
+plotD3_autocorrelation(
+  object,
+  ...,
+  variable = NULL,
+  points = TRUE,
+  smooth = FALSE,
+  point_count = NULL,
+  single_plot = TRUE,
+  scale_plot = FALSE,
+  background = FALSE
+)
 
-plotD3Autocorrelation(object, ..., variable = NULL, points = TRUE,
-  smooth = FALSE, point_count = NULL, single_plot = TRUE,
-  scale_plot = FALSE, background = FALSE)
+plotD3Autocorrelation(
+  object,
+  ...,
+  variable = NULL,
+  points = TRUE,
+  smooth = FALSE,
+  point_count = NULL,
+  single_plot = TRUE,
+  scale_plot = FALSE,
+  background = FALSE
+)
 }
 \arguments{
 \item{object}{An object of class 'auditor_model_residual' created with \code{\link{model_residual}} function.}
@@ -37,7 +53,7 @@ By default plot all of them.}
 By default it's FALSE.}
 }
 \value{
-a `r2d3` object.
+a \code{r2d3} object
 }
 \description{
 Plot of i-th residual vs i+1-th residual.
@@ -49,12 +65,10 @@ dragons <- DALEX::dragons[1:100, ]
 # fit a model
 model_lm <- lm(life_length ~ ., data = dragons)
 
-# use DALEX package to wrap up a model into explainer
-exp_lm <- DALEX::explain(model_lm, data = dragons, y = dragons$life_length)
+lm_audit <- audit(model_lm, data = dragons, y = dragons$life_length)
 
 # validate a model with auditor
-library(auditor)
-mr_lm <- model_residual(exp_lm)
+mr_lm <- model_residual(lm_audit)
 
 # plot results
 plotD3_autocorrelation(mr_lm)

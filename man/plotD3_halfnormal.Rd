@@ -5,11 +5,9 @@
 \alias{plotD3HalfNormal}
 \title{Plot Half-Normal in D3 with r2d3 package.}
 \usage{
-plotD3_halfnormal(object, ..., quantiles = FALSE, sim = 99,
-  scale_plot = FALSE)
+plotD3_halfnormal(object, ..., quantiles = FALSE, sim = 99, scale_plot = FALSE)
 
-plotD3HalfNormal(object, ..., quantiles = FALSE, sim = 99,
-  scale_plot = FALSE)
+plotD3HalfNormal(object, ..., quantiles = FALSE, sim = 99, scale_plot = FALSE)
 }
 \arguments{
 \item{object}{An object of class 'auditor_model_halfnormal' created with \code{\link{model_halfnormal}} function.}
@@ -23,7 +21,7 @@ plotD3HalfNormal(object, ..., quantiles = FALSE, sim = 99,
 \item{scale_plot}{Logical, indicates whenever the plot should scale with height. By default it's FALSE.}
 }
 \value{
-a `r2d3` object.
+a \code{r2d3} object
 }
 \description{
 The half-normal plot is one of the tools designed to evaluate the goodness of fit of a
@@ -38,12 +36,10 @@ dragons <- DALEX::dragons[1:100, ]
 # fit a model
 model_lm <- lm(life_length ~ ., data = dragons)
 
-# use DALEX package to wrap up a model into explainer
-exp_lm <- DALEX::explain(model_lm, data = dragons, y = dragons$life_length)
+lm_audit <- audit(model_lm, data = dragons, y = dragons$life_length)
 
 # validate a model with auditor
-library(auditor)
-hn_lm <- model_halfnormal(exp_lm)
+hn_lm <- model_halfnormal(lm_audit)
 
 # plot results
 plotD3_halfnormal(hn_lm)

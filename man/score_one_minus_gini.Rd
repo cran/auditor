@@ -4,12 +4,16 @@
 \alias{score_one_minus_gini}
 \title{One minus Gini Coefficient}
 \usage{
-score_one_minus_gini(object, data = NULL, ...)
+score_one_minus_gini(object, data = NULL, y = NULL, ...)
 }
 \arguments{
-\item{object}{An object of class \code{explainer} created with function \code{\link[DALEX]{explain}} from the DALEX package.}
+\item{object}{An object of class \code{explainer} created with function
+\code{\link[DALEX]{explain}} from the DALEX package.}
 
-\item{data}{New data that will be used to calcuate the score. Pass \code{NULL} if you want to use \code{data} from \code{object}.}
+\item{data}{New data that will be used to calcuate the score.
+Pass \code{NULL} if you want to use \code{data} from \code{object}.}
+
+\item{y}{New y parameter will be used to calculate score.}
 
 \item{...}{Other arguments dependent on the type of score.}
 }
@@ -22,17 +26,17 @@ One minus Gini COefficient
 0 expresses maximal inequality of values.
 }
 \examples{
-titanic <- na.omit(DALEX::titanic)
-titanic$survived <- titanic$survived == "yes"
+data(titanic_imputed, package = "DALEX")
 
 # fit a model
-model_glm <- glm(survived ~ ., family = binomial, data = titanic)
+model_glm <- glm(survived ~ ., family = binomial, data = titanic_imputed)
 
-#create an explainer
-exp_glm <- DALEX::explain(model_glm, y = titanic$survived)
+glm_audit <- audit(model_glm,
+                   data = titanic_imputed,
+                   y = titanic_imputed$survived)
 
 # calculate score
-score_one_minus_gini(exp_glm)
+score_one_minus_gini(glm_audit)
 
 
 }

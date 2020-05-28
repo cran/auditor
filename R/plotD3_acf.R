@@ -21,20 +21,18 @@
 #' # fit a model
 #' model_lm <- lm(life_length ~ ., data = dragons)
 #'
-#' # use DALEX package to wrap up a model into explainer
-#' exp_lm <- DALEX::explain(model_lm, data = dragons, y = dragons$life_length)
+#' lm_audit <- audit(model_lm, data = dragons, y = dragons$life_length)
 #'
 #' # validate a model with auditor
-#' library(auditor)
-#' mr_lm <- model_residual(exp_lm)
+#' mr_lm <- model_residual(lm_audit)
 #'
 #' # plot results
 #' plotD3_acf(mr_lm)
 #'
 #' library(randomForest)
 #' model_rf <- randomForest(life_length~., data = dragons)
-#' exp_rf <- DALEX::explain(model_rf, data = dragons, y = dragons$life_length)
-#' mr_rf <- model_residual(exp_rf)
+#' rf_audit <- audit(model_rf, data = dragons, y = dragons$life_length)
+#' mr_rf <- model_residual(rf_audit)
 #' plotD3_acf(mr_lm, mr_rf)
 #'
 #' @importFrom stats qnorm acf
@@ -99,6 +97,6 @@ plotD3_acf <- function(object, ..., variable = NULL, alpha = 0.95, scale_plot = 
 #' @rdname plotD3_acf
 #' @export
 plotD3ACF <- function(object, ..., variable = NULL, alpha = 0.95, scale_plot = FALSE) {
-  message("Please note that 'plotD3ACF()' is now deprecated, it is better to use 'plotD3_acf()' instead.")
+  warning("Please note that 'plotD3ACF()' is now deprecated, it is better to use 'plotD3_acf()' instead.")
   plotD3_acf(object, ..., variable, alpha, scale_plot)
 }

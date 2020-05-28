@@ -2,10 +2,18 @@
 % Please edit documentation in R/audit.R
 \name{audit}
 \alias{audit}
-\title{Create modelAudit object}
+\title{Deprecated}
 \usage{
-audit(object, data = NULL, y = NULL, predict.function = NULL,
-  residual.function = NULL, label = NULL)
+audit(
+  object,
+  data = NULL,
+  y = NULL,
+  predict.function = NULL,
+  residual.function = NULL,
+  label = NULL,
+  predict_function = NULL,
+  residual_function = NULL
+)
 }
 \arguments{
 \item{object}{An object containing a model or object of class explainer (see \code{\link[DALEX]{explain}}).}
@@ -19,37 +27,30 @@ audit(object, data = NULL, y = NULL, predict.function = NULL,
 \item{residual.function}{Function that takes three arguments: model, data and response vector. It should return a numeric vector with model residuals for given data. If not provided, response residuals (\eqn{y-\hat{y}}) are calculated.}
 
 \item{label}{Character - the name of the model. By default it's extracted from the 'class' attribute of the model.}
+
+\item{predict_function}{Function that takes two arguments: model and data. It should return a numeric vector with predictions.}
+
+\item{residual_function}{Function that takes three arguments: model, data and response vector. It should return a numeric vector with model residuals for given data. If not provided, response residuals (\eqn{y-\hat{y}}) are calculated.}
 }
 \value{
-An object of class ModelAudit, which contains:
-#' \itemize{
-\item \code{model.class} class of the audited model,
-\item \code{label} the name of the model,
-\item \code{model} the audited model,
-\item \code{fitted.values} fitted values from model,
-\item \code{data} data used for fitting the model,
-\item \code{y} vector with values of predicted variable used for fitting the model,
-\item \code{predict.function} function that were used for model predictions,
-\item \code{residual.function} function that were used for calculating model residuals,
-\item \code{residuals}
-\item \code{std.residuals} standardized residuals - the residuals divided by theirs standard deviation.
-}
+An object of class \code{explainer}.
 }
 \description{
-Function \code{audit} create modelAudit object for further validation of a model.
-Models may have very different structures. This function creates a unified representation of a model and calculates residuals,
-which can be further processed by various error analysis functions.
-
-Function 'audit()' is deprecated, please, use an object of class 'explainer' created with function
-\code{\link[DALEX]{explain}} from the DALEX package.
+The \code{audit()} function is deprecated, use \code{\link[DALEX]{explain}} from the \code{DALEX} package instead.
 }
 \examples{
-titanic <- na.omit(DALEX::titanic)
-model_glm <- glm(survived ~ ., family = binomial, data = titanic)
-audit_glm <- audit(model_glm)
+data(titanic_imputed, package = "DALEX")
 
-p_fun <- function(model, data){predict(model, data, response = "link")}
-audit_glm_newpred <- audit(model_glm, predict.function = p_fun)
+model_glm <- glm(survived ~ ., family = binomial, data = titanic_imputed)
+audit_glm <- audit(model_glm,
+                   data = titanic_imputed,
+                   y = titanic_imputed$survived)
+
+p_fun <- function(model, data) { predict(model, data, response = "link") }
+audit_glm_newpred <- audit(model_glm,
+                           data = titanic_imputed,
+                           y = titanic_imputed$survived,
+                           predict.function = p_fun)
 
 
 library(randomForest)

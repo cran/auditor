@@ -16,7 +16,7 @@
 #' @param background Logical, available only if single_plot = FALSE. Indicates whenever backgroud plots should be plotted.
 #' By default it's FALSE.
 #'
-#' @return a `r2d3` object.
+#' @return a \code{r2d3} object
 #'
 #' @examples
 #'
@@ -25,12 +25,10 @@
 #' # fit a model
 #' model_lm <- lm(life_length ~ ., data = dragons)
 #'
-#' # use DALEX package to wrap up a model into explainer
-#' exp_lm <- DALEX::explain(model_lm, data = dragons, y = dragons$life_length)
+#' lm_audit <- audit(model_lm, data = dragons, y = dragons$life_length)
 #'
 #' # validate a model with auditor
-#' library(auditor)
-#' mr_lm <- model_residual(exp_lm)
+#' mr_lm <- model_residual(lm_audit)
 #'
 #' # plot results
 #' plotD3_autocorrelation(mr_lm)
@@ -157,7 +155,7 @@ plotD3_autocorrelation <- function(object, ..., variable = NULL, points = TRUE, 
 plotD3Autocorrelation <- function(object, ..., variable = NULL, points = TRUE, smooth = FALSE,
                                   point_count = NULL, single_plot = TRUE, scale_plot = FALSE,
                                   background = FALSE) {
-  message("Please note that 'plotD3Autocorrelation()' is now deprecated, it is better to use 'plotD3_autocorrelation()' instead.")
+  warning("Please note that 'plotD3Autocorrelation()' is now deprecated, it is better to use 'plotD3_autocorrelation()' instead.")
   plotD3_autocorrelation(object, ..., variable, points, smooth,
            point_count, single_plot, scale_plot,
            background)

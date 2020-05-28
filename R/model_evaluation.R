@@ -5,27 +5,28 @@
 #' Returns, among others, true positive rate (tpr), false positive rate (fpr),
 #' rate of positive prediction (rpp), and true positives (tp).
 #'
-#' Created object of class 'auditor_model_evaluation' can be used to plot
+#' Created object of class \code{auditor_model_evaluation} can be used to plot
 #' Receiver Operating Characteristic (ROC) curve (plot \code{\link{plot_roc}}) and LIFT curve (plot \code{\link{plot_lift}}).
 #'
-#' @param object An object of class 'explainer' created with function \code{\link[DALEX]{explain}} from the DALEX package.
+#' @param object An object of class \code{explainer} created with function \code{\link[DALEX]{explain}} from the DALEX package.
 #'
-#' @return An object of class 'auditor_model_evaluation'.
+#' @return An object of the class \code{auditor_model_evaluation}.
 #'
 #' @examples
-#' titanic <- na.omit(DALEX::titanic)
-#' titanic$survived <- titanic$survived == "yes"
+#' data(titanic_imputed, package = "DALEX")
 #'
 #' # fit a model
-#' model_glm <- glm(survived ~ ., family = binomial, data = titanic)
+#' model_glm <- glm(survived ~ ., family = binomial, data = titanic_imputed)
 #'
-#' # use DALEX package to wrap up a model into explainer
-#' exp_glm <- DALEX::explain(model_glm, data= titanic, y = titanic$survived)
+#' glm_audit <- audit(model_glm,
+#'                    data= titanic_imputed,
+#'                    y = titanic_imputed$survived)
 #'
 #' # validate a model with auditor
-#' library(auditor)
-#' model_evaluation(exp_glm)
+#' me <- model_evaluation(glm_audit)
+#' me
 #'
+#' plot(me)
 #'
 #' @export
 model_evaluation <- function(object) {
@@ -36,13 +37,23 @@ model_evaluation <- function(object) {
   df <- data.frame(y_hat = object$y_hat, y = object$y)
   df <- df[order(df$y_hat, decreasing = TRUE), ]
 
+  roc_y <- factor(df$y)
+  positive_label <- levels(roc_y)[2]
+  negative_label <- levels(roc_y)[1]
+
+
   # true & false positives
-  tp <- cumsum(df$y == TRUE)
-  fp <- cumsum(df$y == FALSE)
+  tp_duplicates <- cumsum(df$y == positive_label)
+  fp_duplicates <- cumsum(df$y == negative_label)
+
+  # remove duplicates
+  duplicates <- rev(duplicated(rev(df$y_hat)))
+  tp <- c(0, tp_duplicates[!duplicates])
+  fp <- c(0, fp_duplicates[!duplicates])
 
   # number of positives & negatives
-  n_pos <- sum(df$y == TRUE)
-  n_neg <- sum(df$y == FALSE)
+  n_pos <- sum(df$y == positive_label)
+  n_neg <- sum(df$y == negative_label)
 
   # false negatives & true negatives
   fn <- n_pos - tp
@@ -59,15 +70,21 @@ model_evaluation <- function(object) {
   # rate of positive predictions
   rpp <- (tp + fp) / (tp + fp + tn + fn)
 
+  precision <- tp / (tp + fp)
+  recall <- tp / n_pos
+
+
   # final data frame
-  result <- data.frame(y_hat = object$y_hat,
-                       y = factor(object$y),
-                       cutoffs = df$y_hat,
+  result <- data.frame(y_hat = c(0, object$y_hat[!duplicates]),
+                       y = c(0, factor(object$y)[!duplicates]),
+                       cutoffs = c(0, df$y_hat[!duplicates]),
                        tpr = tpr,
                        fpr = fpr,
                        rpp = rpp,
                        tp = tp,
-                       label = factor(object$label))
+                       precision = precision,
+                       recall = recall,
+                       label = factor(object$label), stringsAsFactors = TRUE)
 
   colnames(result) <- paste0("_", colnames(result), "_")
   class(result) <- c("auditor_model_evaluation", "data.frame")
@@ -80,6 +97,6 @@ model_evaluation <- function(object) {
 #' @rdname model_evaluation
 #' @export
 modelEvaluation <- function(object) {
-  message("Please note that 'modelEvaluation()' is now deprecated, it is better to use 'model_evaluation()' instead.")
+  warning("Please note that 'modelEvaluation()' is now deprecated, it is better to use 'model_evaluation()' instead.")
   model_evaluation(object)
 }

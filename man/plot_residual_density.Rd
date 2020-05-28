@@ -5,14 +5,14 @@
 \alias{plotResidualDensity}
 \title{Residual Density Plot}
 \usage{
-plot_residual_density(object, ..., variable = "")
+plot_residual_density(object, ..., variable = "", show_rugs = TRUE)
 
 plotResidualDensity(object, ..., variable = NULL)
 }
 \arguments{
-\item{object}{An object of class 'auditor_model_residual' created with \code{\link{model_residual}} function.}
+\item{object}{An object of class \code{auditor_model_residual} created with \code{\link{model_residual}} function.}
 
-\item{...}{Other 'auditor_model_residual' objects to be plotted together.}
+\item{...}{Other \code{auditor_model_residual} objects to be plotted together.}
 
 \item{variable}{Split plot by variable's factor level or median.
 If \code{variable="_y_"}, the plot will be splitted by actual response (\code{y} parameter
@@ -20,9 +20,11 @@ passed to the \code{\link[DALEX]{explain}} function).
 If \code{variable = "_y_hat_"} the plot will be splitted by predicted response.
 If \code{variable = NULL}, the plot will be splitted by observation index
 If \code{variable = ""} plot is not splitted (default option).}
+
+\item{show_rugs}{Adds rugs layer to the plot. By default it's TRUE}
 }
 \value{
-ggplot object
+A ggplot object.
 }
 \description{
 Density of model residuals.
@@ -33,12 +35,10 @@ dragons <- DALEX::dragons[1:100, ]
 # fit a model
 model_lm <- lm(life_length ~ ., data = dragons)
 
-# use DALEX package to wrap up a model into explainer
-exp_lm <- DALEX::explain(model_lm, data = dragons, y = dragons$life_length)
+lm_audit <- audit(model_lm, data = dragons, y = dragons$life_length)
 
 # validate a model with auditor
-library(auditor)
-mr_lm <- model_residual(exp_lm)
+mr_lm <- model_residual(lm_audit)
 
 # plot results
 plot_residual_density(mr_lm)
@@ -46,8 +46,8 @@ plot(mr_lm, type = "residual_density")
 
 library(randomForest)
 model_rf <- randomForest(life_length~., data = dragons)
-exp_rf <- DALEX::explain(model_rf, data = dragons, y = dragons$life_length)
-mr_rf <- model_residual(exp_rf)
+rf_audit <- audit(model_rf, data = dragons, y = dragons$life_length)
+mr_rf <- model_residual(rf_audit)
 plot_residual_density(mr_lm, mr_rf)
 plot(mr_lm, mr_rf, type = "residual_density")
 

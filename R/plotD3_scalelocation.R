@@ -2,23 +2,23 @@
 #'
 #' @description
 #' Function \code{plotD3_scalelocation} plots square root of the absolute value of the residuals vs target,
-#' observed or variable values in the model. #' A vertical line corresponds to median.
+#' observed or variable values in the model. A vertical line corresponds to median.
 #'
-#' @param object An object of class 'auditor_model_residual' created with \code{\link{model_residual}} function.
-#' @param ... Other 'auditor_model_residual' objects to be plotted together.
+#' @param object An object of class \code{auditor_model_residual} created with \code{\link{model_residual}} function.
+#' @param ... Other \code{auditor_model_residual} objects to be plotted together.
 #' @param variable Name of variable to order residuals on a plot.
 #' If \code{variable="_y_"}, the data is ordered by a vector of actual response (\code{y} parameter
 #' passed to the \code{\link[DALEX]{explain}} function).
 #' If \code{variable = "_y_hat_"} the data on the plot will be ordered by predicted response.
 #' If \code{variable = NULL}, unordered observations are presented.
-#' @param smooth Logical, indicates whenever smoothed lines should be added. By default it's FALSE.
-#' @param peaks Logical, indicates whenever peak observations should be highlighted. By defaul it's FALSE.
+#' @param smooth Logical, indicates whenever smoothed lines should be added. By default it's \code{FALSE}.
+#' @param peaks Logical, indicates whenever peak observations should be highlighted. By defaul it's \code{FALSE}.
 #' @param point_count Number of points to be plotted per model. Points will be chosen randomly. By default plot all of them.
-#' @param single_plot Logical, indicates whenever single or facets should be plotted. By default it's TRUE.
-#' @param scale_plot Logical, indicates whenever the plot should scale with height. By default it's FALSE.
+#' @param single_plot Logical, indicates whenever single or facets should be plotted. By default it's \code{TRUE}.
+#' @param scale_plot Logical, indicates whenever the plot should scale with height. By default it's \code{FALSE}.
 #' @param background Logical, available only if single_plot = FALSE. Indicates whenever backgroud plots should be plotted. By default it's FALSE.
 #'
-#' @return a `r2d3` object.
+#' @return a \code{r2d3} object
 #'
 #' @seealso \code{\link{plot_scalelocation}}
 #'
@@ -28,12 +28,10 @@
 #' # fit a model
 #' model_lm <- lm(life_length ~ ., data = dragons)
 #'
-#' # use DALEX package to wrap up a model into explainer
-#' exp_lm <- DALEX::explain(model_lm, data = dragons, y = dragons$life_length)
+#' lm_audit <- audit(model_lm, data = dragons, y = dragons$life_length)
 #'
 #' # validate a model with auditor
-#' library(auditor)
-#' mr_lm <- model_residual(exp_lm)
+#' mr_lm <- model_residual(lm_audit)
 #'
 #' # plot results
 #' plotD3_scalelocation(mr_lm, peaks = TRUE)
@@ -164,7 +162,7 @@ plotD3ScaleLocation <- function(object, ..., variable = NULL, smooth = FALSE,
                                 peaks = FALSE, point_count = NULL, single_plot = TRUE,
                                 scale_plot = FALSE, background = FALSE){
 
-  message("Please note that 'plotD3ScaleLocation()' is now deprecated, it is better to use 'plotD3_scalelocation()' instead.")
+  warning("Please note that 'plotD3ScaleLocation()' is now deprecated, it is better to use 'plotD3_scalelocation()' instead.")
   plotD3_scalelocation(object, ..., variable, smooth,
                                   peaks, point_count, single_plot,
                                   scale_plot, background)

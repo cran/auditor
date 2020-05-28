@@ -25,10 +25,10 @@
 #' model_lm <- lm(life_length ~ ., data = dragons)
 #'
 #' # create an explainer
-#' exp_lm <- DALEX::explain(model_lm, data = dragons, y = dragons$life_length)
+#' lm_audit <- audit(model_lm, data = dragons, y = dragons$life_length)
 #'
 #' # calculate score
-#' score_cooksdistance(exp_lm)
+#' score_cooksdistance(lm_audit)
 #'
 #'
 #' @importFrom stats cooks.distance update
@@ -38,8 +38,6 @@
 #' @return numeric vector
 #'
 #' @export
-#'
-
 score_cooksdistance <- function(object, verbose = TRUE, ...){
   if(!("explainer" %in% class(object))) stop("The function requires an object created with explain() function from the DALEX package.")
 
@@ -78,6 +76,6 @@ compute_cooksdistances <- function(object, verbose) {
 #' @rdname score_cooksdistance
 #' @export
 scoreCooksDistance <- function(object, verbose=TRUE) {
-  message("Please note that 'scoreCooksDistance()' is now deprecated, it is better to use 'score_cooksdistance()' instead.")
+  warning("Please note that 'scoreCooksDistance()' is now deprecated, it is better to use 'score_cooksdistance()' instead.")
   score_cooksdistance(object, verbose)
 }

@@ -8,30 +8,34 @@
 #' @param scale_plot Logical, indicates whenever the plot should scale with height. By default it's FALSE.
 #' @param zeros Logical. It makes the lines start from the \code{(0,0)} point. By default it's \code{TRUE}.
 #'
-#' @return a `r2d3` object
+#' @return a \code{r2d3} object
 #'
 #' @seealso \code{\link{plot_lift}}
 #'
 #' @examples
-#' titanic <- na.omit(DALEX::titanic)
-#' titanic$survived <- titanic$survived == "yes"
+#' data(titanic_imputed, package = "DALEX")
 #'
 #' # fit a model
-#' model_glm <- glm(survived ~ ., family = binomial, data = titanic)
+#' model_glm <- glm(survived ~ ., family = binomial, data = titanic_imputed)
 #'
-#' # use DALEX package to wrap up a model into explainer
-#' exp_glm <- DALEX::explain(model_glm, data = titanic, y = titanic$survived)
+#' glm_audit <- audit(model_glm,
+#'                    data = titanic_imputed,
+#'                    y = titanic_imputed$survived)
 #'
 #' # validate a model with auditor
-#' library(auditor)
-#' eva_glm <- model_evaluation(exp_glm)
+#' eva_glm <- model_evaluation(glm_audit)
 #'
 #' # plot results
-#' plotD3_lift(eva_glm)
+#' plot_roc(eva_glm)
+#' plot(eva_glm)
 #'
-#' model_glm_2 <- glm(survived ~ .-age, family = binomial, data = titanic)
-#' exp_glm_2 <- DALEX::explain(model_glm_2, data = titanic, y = titanic$survived, label = "glm2")
-#' eva_glm_2 <- model_evaluation(exp_glm_2)
+#' #add second model
+#' model_glm_2 <- glm(survived ~ .-age, family = binomial, data = titanic_imputed)
+#' glm_audit_2 <- audit(model_glm_2,
+#'                      data = titanic_imputed,
+#'                      y = titanic_imputed$survived,
+#'                      label = "glm2")
+#' eva_glm_2 <- model_evaluation(glm_audit_2)
 #'
 #' plotD3_lift(eva_glm, eva_glm_2)
 #'
@@ -120,6 +124,6 @@ plotD3_lift <- function(object, ..., scale_plot = FALSE, zeros = TRUE) {
 #' @rdname plotD3_lift
 #' @export
 plotD3LIFT <- function(object, ..., scale_plot = FALSE) {
-  message("Please note that 'plotD3LIFT()' is now deprecated, it is better to use 'plotD3_lift()' instead.")
+  warning("Please note that 'plotD3LIFT()' is now deprecated, it is better to use 'plotD3_lift()' instead.")
   plotD3_lift(object, ..., scale_plot)
 }

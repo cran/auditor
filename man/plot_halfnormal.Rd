@@ -10,9 +10,9 @@ plot_halfnormal(object, ..., quantiles = FALSE, sim = 99)
 plotHalfNormal(object, ..., quantiles = FALSE, sim = 99)
 }
 \arguments{
-\item{object}{An object of class 'auditor_model_halfnormal' created with \code{\link{model_halfnormal}} function.}
+\item{object}{An object of class \code{auditor_model_halfnormal} created with \code{\link{model_halfnormal}} function.}
 
-\item{...}{Other 'auditor_model_halfnormal' objects.}
+\item{...}{Other \code{auditor_model_halfnormal} objects.}
 
 \item{quantiles}{If TRUE values on axis are on quantile scale.}
 
@@ -34,12 +34,10 @@ dragons <- DALEX::dragons[1:100, ]
 # fit a model
 model_lm <- lm(life_length ~ ., data = dragons)
 
-# use DALEX package to wrap up a model into explainer
-exp_lm <- DALEX::explain(model_lm, data = dragons, y = dragons$life_length)
+lm_audit <- audit(model_lm, data = dragons, y = dragons$life_length)
 
 # validate a model with auditor
-library(auditor)
-hn_lm <- model_halfnormal(exp_lm)
+hn_lm <- model_halfnormal(lm_audit)
 
 # plot results
 plot_halfnormal(hn_lm)

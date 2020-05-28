@@ -26,18 +26,22 @@
 #' @return An object of the class \code{auditor_model_performance}.
 #'
 #' @examples
-#' titanic <- na.omit(DALEX::titanic)
-#' titanic$survived <- titanic$survived == "yes"
+#' data(titanic_imputed, package = "DALEX")
 #'
 #' # fit a model
-#' model_glm <- glm(survived ~ ., family = binomial, data = titanic)
+#' model_glm <- glm(survived ~ ., family = binomial, data = titanic_imputed)
 #'
 #' # use DALEX package to wrap up a model into explainer
-#' exp_glm <- DALEX::explain(model_glm, data = titanic, y = titanic$survived)
+#' glm_audit <- audit(model_glm,
+#'                    data = titanic_imputed,
+#'                    y = titanic_imputed$survived)
 #'
 #' # validate a model with auditor
 #' library(auditor)
-#' model_performance(exp_glm)
+#' mp <- model_performance(glm_audit)
+#' mp
+#'
+#' plot(mp)
 #'
 #' @export
 model_performance <- function(object, score = c("mae", "mse", "rec", "rroc"), new_score = NULL, data = NULL, ...) {
@@ -49,20 +53,25 @@ model_performance <- function(object, score = c("mae", "mse", "rec", "rroc"), ne
 
   if (!is.null(score)) {
     score <- sapply(score, function(x) score(object, type = x, ...)$score)
-    df <- data.frame(score = score[1], label = object$label, name = names(score[1]))
-    if (length(score) > 1) df <- rbind(df, data.frame(score = score[-1], label = object$label, name = names(score[-1])))
+    df <- data.frame(score = score[1], label = object$label, name = names(score[1]),
+                     stringsAsFactors = TRUE)
+    if (length(score) > 1) df <- rbind(df, data.frame(score = score[-1], label = object$label, name = names(score[-1]),
+                                                      stringsAsFactors = TRUE))
   } else {
-    df <- data.frame(score = numeric(), label = factor(), name = character())
+    df <- data.frame(score = numeric(), label = factor(), name = character(),
+                     stringsAsFactors = TRUE)
   }
 
 
   if (!is.null(new_score)) {
     if (class(new_score) == "function") {
-      df <- rbind(df, data.frame(score = new_score(object), label = object$label, name = as.character(substitute(new_score))))
+      df <- rbind(df, data.frame(score = new_score(object), label = object$label, name = as.character(substitute(new_score)),
+                                 stringsAsFactors = TRUE))
     }
     if (class(new_score) == "list") {
       for (i in names(new_score)) {
-        df <- rbind(df, data.frame(score = new_score[[i]](object), label = object$label, name = i))
+        df <- rbind(df, data.frame(score = new_score[[i]](object), label = object$label, name = i,
+                                   stringsAsFactors = TRUE))
       }
     }
   }
@@ -78,6 +87,6 @@ model_performance <- function(object, score = c("mae", "mse", "rec", "rroc"), ne
 #'
 #' @export
 modelPerformance  <- function(object, score = c("mae", "mse", "rec", "rroc"), new_score = NULL) {
-  message("Please note that 'modelPerformance()' is now deprecated, it is better to use 'model_performance()' instead.")
+  warning("Please note that 'modelPerformance()' is now deprecated, it is better to use 'model_performance()' instead.")
   model_performance(object, score, new_score)
 }

@@ -5,11 +5,19 @@
 \alias{modelPerformance}
 \title{Create Model Performance Explaination}
 \usage{
-model_performance(object, score = c("mae", "mse", "rec", "rroc"),
-  new_score = NULL, data = NULL, ...)
+model_performance(
+  object,
+  score = c("mae", "mse", "rec", "rroc"),
+  new_score = NULL,
+  data = NULL,
+  ...
+)
 
-modelPerformance(object, score = c("mae", "mse", "rec", "rroc"),
-  new_score = NULL)
+modelPerformance(
+  object,
+  score = c("mae", "mse", "rec", "rroc"),
+  new_score = NULL
+)
 }
 \arguments{
 \item{object}{An object of class \code{explainer} created with function \code{\link[DALEX]{explain}} from the DALEX package.}
@@ -34,18 +42,22 @@ An object of the class \code{auditor_model_performance}.
 Creates \code{auditor_model_performance} object that can be used to plot radar with ranking of models.
 }
 \examples{
-titanic <- na.omit(DALEX::titanic)
-titanic$survived <- titanic$survived == "yes"
+data(titanic_imputed, package = "DALEX")
 
 # fit a model
-model_glm <- glm(survived ~ ., family = binomial, data = titanic)
+model_glm <- glm(survived ~ ., family = binomial, data = titanic_imputed)
 
 # use DALEX package to wrap up a model into explainer
-exp_glm <- DALEX::explain(model_glm, data = titanic, y = titanic$survived)
+glm_audit <- audit(model_glm,
+                   data = titanic_imputed,
+                   y = titanic_imputed$survived)
 
 # validate a model with auditor
 library(auditor)
-model_performance(exp_glm)
+mp <- model_performance(glm_audit)
+mp
+
+plot(mp)
 
 }
 \seealso{

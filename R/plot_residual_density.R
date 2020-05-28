@@ -2,16 +2,17 @@
 #'
 #' @description Density of model residuals.
 #'
-#' @param object An object of class 'auditor_model_residual' created with \code{\link{model_residual}} function.
+#' @param object An object of class \code{auditor_model_residual} created with \code{\link{model_residual}} function.
 #' @param variable Split plot by variable's factor level or median.
 #' If \code{variable="_y_"}, the plot will be splitted by actual response (\code{y} parameter
 #' passed to the \code{\link[DALEX]{explain}} function).
 #' If \code{variable = "_y_hat_"} the plot will be splitted by predicted response.
 #' If \code{variable = NULL}, the plot will be splitted by observation index
 #' If \code{variable = ""} plot is not splitted (default option).
-#' @param ... Other 'auditor_model_residual' objects to be plotted together.
+#' @param ... Other \code{auditor_model_residual} objects to be plotted together.
+#' @param show_rugs Adds rugs layer to the plot. By default it's TRUE
 #'
-#' @return ggplot object
+#' @return A ggplot object.
 #'
 #' @examples
 #' dragons <- DALEX::dragons[1:100, ]
@@ -19,12 +20,10 @@
 #' # fit a model
 #' model_lm <- lm(life_length ~ ., data = dragons)
 #'
-#' # use DALEX package to wrap up a model into explainer
-#' exp_lm <- DALEX::explain(model_lm, data = dragons, y = dragons$life_length)
+#' lm_audit <- audit(model_lm, data = dragons, y = dragons$life_length)
 #'
 #' # validate a model with auditor
-#' library(auditor)
-#' mr_lm <- model_residual(exp_lm)
+#' mr_lm <- model_residual(lm_audit)
 #'
 #' # plot results
 #' plot_residual_density(mr_lm)
@@ -32,19 +31,18 @@
 #'
 #' library(randomForest)
 #' model_rf <- randomForest(life_length~., data = dragons)
-#' exp_rf <- DALEX::explain(model_rf, data = dragons, y = dragons$life_length)
-#' mr_rf <- model_residual(exp_rf)
+#' rf_audit <- audit(model_rf, data = dragons, y = dragons$life_length)
+#' mr_rf <- model_residual(rf_audit)
 #' plot_residual_density(mr_lm, mr_rf)
 #' plot(mr_lm, mr_rf, type = "residual_density")
 #'
 #' @seealso \code{\link{plot_residual}}
 #'
-#' @import ggplot2
 #'
 #' @rdname plot_residual_density
 #'
 #' @export
-plot_residual_density <- function(object, ..., variable = "") {
+plot_residual_density <- function(object, ..., variable = "", show_rugs = TRUE) {
   # some safeguard
   `_residuals_` <- `_label_` <- label <- div <- NULL
 
@@ -91,7 +89,6 @@ plot_residual_density <- function(object, ..., variable = "") {
 
   p <- ggplot(data = df, aes(x = `_residuals_`)) +
     geom_density(alpha = 0.3, aes(fill = `_label_`)) +
-    geom_rug(aes(color = `_label_`), alpha = 0.5, show.legend = FALSE) +
     geom_vline(xintercept = 0, colour = "darkgrey") +
     annotate("segment", x = -Inf, xend = Inf,  y = -Inf, yend = -Inf, colour = "#371ea3") +
     scale_color_manual(values = colours) +
@@ -104,6 +101,10 @@ plot_residual_density <- function(object, ..., variable = "") {
           legend.position = legend_pos,
           legend.justification = legend_just) +
     xlab("") + ylab("") + ggtitle(paste0("Residuals density by ", lab))
+
+  if (show_rugs) {
+    p <- p + geom_rug(aes(color = `_label_`), alpha = 0.5, show.legend = FALSE)
+  }
 
   if (split == FALSE) {
     p
@@ -119,6 +120,6 @@ plot_residual_density <- function(object, ..., variable = "") {
 #' @rdname plot_residual_density
 #' @export
 plotResidualDensity <- function(object, ..., variable = NULL) {
-  message("Please note that 'plotResidualDensity()' is now deprecated, it is better to use 'plot_residual_density()' instead.")
+  warning("Please note that 'plotResidualDensity()' is now deprecated, it is better to use 'plot_residual_density()' instead.")
   plot_residual_density(object, ..., variable = variable)
 }

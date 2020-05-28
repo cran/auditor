@@ -5,16 +5,28 @@
 \alias{plotResidual}
 \title{Plot Residuals vs Observed, Fitted or Variable Values}
 \usage{
-plot_residual(object, ..., variable = "_y_", smooth = FALSE,
-  std_residuals = FALSE, nlabel = 0)
+plot_residual(
+  object,
+  ...,
+  variable = "_y_",
+  smooth = FALSE,
+  std_residuals = FALSE,
+  nlabel = 0
+)
 
-plotResidual(object, ..., variable = NULL, smooth = FALSE,
-  std_residuals = FALSE, nlabel = 0)
+plotResidual(
+  object,
+  ...,
+  variable = NULL,
+  smooth = FALSE,
+  std_residuals = FALSE,
+  nlabel = 0
+)
 }
 \arguments{
-\item{object}{An object of class 'auditor_model_residual' created with \code{\link{model_residual}} function.}
+\item{object}{An object of class \code{auditor_model_residual} created with \code{\link{model_residual}} function.}
 
-\item{...}{Other 'auditor_model_residual' objects to be plotted together.}
+\item{...}{Other \code{auditor_model_residual} objects to be plotted together.}
 
 \item{variable}{Name of variable to order residuals on a plot.
 If \code{variable="_y_"}, the data is ordered by a vector of actual response (\code{y} parameter
@@ -22,7 +34,7 @@ passed to the \code{\link[DALEX]{explain}} function).
 If \code{variable = "_y_hat_"} the data on the plot will be ordered by predicted response.
 If \code{variable = NULL}, unordered observations are presented.}
 
-\item{smooth}{Logical, indicates whenever smoothed lines should be added. By default it's FALSE.}
+\item{smooth}{Logical, indicates whenever smoothed lines should be added. By default it's \code{FALSE}.}
 
 \item{std_residuals}{Logical, indicates whenever standardized residuals should be used.}
 
@@ -37,12 +49,10 @@ dragons <- DALEX::dragons[1:100, ]
 # fit a model
 model_lm <- lm(life_length ~ ., data = dragons)
 
-# use DALEX package to wrap up a model into explainer
-exp_lm <- DALEX::explain(model_lm, data = dragons, y = dragons$life_length)
+lm_audit <- audit(model_lm, data = dragons, y = dragons$life_length)
 
 # validate a model with auditor
-library(auditor)
-mr_lm <- model_residual(exp_lm)
+mr_lm <- model_residual(lm_audit)
 
 # plot results
 plot_residual(mr_lm)
@@ -50,8 +60,8 @@ plot(mr_lm, type = "residual")
 
 library(randomForest)
 model_rf <- randomForest(life_length~., data = dragons)
-exp_rf <- DALEX::explain(model_rf, data = dragons, y = dragons$life_length)
-mr_rf <- model_residual(exp_rf)
+rf_audit <- audit(model_rf, data = dragons, y = dragons$life_length)
+mr_rf <- model_residual(rf_audit)
 plot_residual(mr_lm, mr_rf)
 plot(mr_rf, mr_rf, type = "residual")
 

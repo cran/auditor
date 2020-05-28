@@ -4,18 +4,17 @@
 #' @param ... other parameters
 #'
 #' @examples
-#' titanic <- na.omit(DALEX::titanic)
+#' data(titanic_imputed, package = "DALEX")
 #'
 #' # fit a model
-#' model_glm <- glm(survived ~ ., family = binomial, data = titanic)
-#' titanic$survived <- titanic$survived == "yes"
+#' model_glm <- glm(survived ~ ., family = binomial, data = titanic_imputed)
 #'
-#' # use DALEX package to wrap up a model into explainer
-#' exp_glm <- DALEX::explain(model_glm, data = titanic, y = titanic$survived)
+#' glm_audit <- audit(model_glm,
+#'                    data = titanic_imputed,
+#'                    y = titanic_imputed$survived)
 #'
 #' # validate a model with auditor
-#' library(auditor)
-#' model_residual(exp_glm)
+#' model_residual(glm_audit)
 #'
 #' @importFrom stats quantile
 #'
@@ -33,7 +32,6 @@ print.auditor_model_residual <- function(x, ...) {
 #' @param x an object \code{auditor_model_cooksdistance} created with \code{\link{model_cooksdistance}} function.
 #' @param ... other parameters
 #'
-#' @export
 #'
 #' @examples
 #' dragons <- DALEX::dragons[1:100, ]
@@ -42,10 +40,10 @@ print.auditor_model_residual <- function(x, ...) {
 #' model_lm <- lm(life_length ~ ., data = dragons)
 #'
 #' # create an explainer
-#' exp_lm <- DALEX::explain(model_lm, data = dragons, y = dragons$life_length)
+#' lm_audit <- audit(model_lm, data = dragons, y = dragons$life_length)
 #'
 #' # calculate score
-#' model_cooksdistance(exp_lm)
+#' model_cooksdistance(lm_audit)
 #'
 #' @importFrom stats quantile
 #'
@@ -67,22 +65,18 @@ print.auditor_model_cooksdistance <- function(x, ...) {
 #' @param x an object \code{auditor_model_evaluation} created with \code{\link{model_evaluation}} function.
 #' @param ... other parameters
 #'
-#' @export
-#'
 #' @examples
-#' titanic <- na.omit(DALEX::titanic)
-#' titanic$survived <- titanic$survived == "yes"
+#' data(titanic_imputed, package = "DALEX")
 #'
 #' # fit a model
-#' model_glm <- glm(survived ~ ., family = binomial, data = titanic)
+#' model_glm <- glm(survived ~ ., family = binomial, data = titanic_imputed)
 #'
-#' # use DALEX package to wrap up a model into explainer
-#' exp_glm <- DALEX::explain(model_glm, data= titanic, y = titanic$survived,
-#'                           predict_function = function(m, d)predict(m, newdata=d, type="response"))
+#' glm_audit <- audit(model_glm,
+#'                    data= titanic_imputed,
+#'                    y = titanic_imputed$survived)
 #'
 #' # validate a model with auditor
-#' library(auditor)
-#' model_evaluation(exp_glm)
+#' model_evaluation(glm_audit)
 #'
 #'
 #' @export
@@ -101,20 +95,19 @@ print.auditor_model_evaluation <- function(x, ...) {
 #' @param x an object \code{auditor_model_halfnormal} created with \code{\link{model_halfnormal}} function.
 #' @param ... other parameters
 #'
-#' @export
 #'
 #' @examples
-#' titanic <- na.omit(DALEX::titanic[1:100,])
+#' data(titanic_imputed, package = "DALEX")
 #'
 #' # fit a model
-#' model_glm <- glm(survived ~ ., family = binomial, data = titanic)
+#' model_glm <- glm(survived ~ ., family = binomial, data = titanic_imputed)
 #'
-#' # use DALEX package to wrap up a model into explainer
-#' exp_glm <- DALEX::explain(model_glm)
+#' glm_audit <- audit(model_glm,
+#'                    data = titanic_imputed,
+#'                    y = titanic_imputed$survived)
 #'
 #' # validate a model with auditor
-#' library(auditor)
-#' model_halfnormal(exp_glm)
+#' model_halfnormal(glm_audit)
 #'
 #'
 #' @export
@@ -131,22 +124,19 @@ print.auditor_model_halfnormal <- function(x, ...) {
 #' @param x an object \code{auditor_model_performance} created with \code{\link{model_performance}} function.
 #' @param ... other parameters
 #'
-#' @export
 #'
 #' @examples
-#' titanic <- na.omit(DALEX::titanic)
-#' titanic$survived <- titanic$survived == "yes"
+#' data(titanic_imputed, package = "DALEX")
 #'
 #' # fit a model
-#' model_glm <- glm(survived ~ ., family = binomial, data = titanic)
+#' model_glm <- glm(survived ~ ., family = binomial, data = titanic_imputed)
 #'
-#' # use DALEX package to wrap up a model into explainer
-#' exp_glm <- DALEX::explain(model_glm, data = titanic, y = titanic$survived)
+#' glm_audit <- audit(model_glm,
+#'                    data = titanic_imputed,
+#'                    y = titanic_imputed$survived)
 #'
 #' # validate a model with auditor
-#' library(auditor)
-#' model_performance(exp_glm)
-#'
+#' model_performance(glm_audit)
 #'
 #' @export
 print.auditor_model_performance <- function(x, ...) {
@@ -168,14 +158,16 @@ print.auditor_model_performance <- function(x, ...) {
 #' @export
 #'
 #' @examples
-#' titanic <- na.omit(DALEX::titanic)
-#' titanic$survived <- titanic$survived == "yes"
+#' data(titanic_imputed, package = "DALEX")
+#'
 #' # fit a model
-#' model_glm <- glm(survived ~ ., family = binomial, data = titanic)
-#' # create an explainer
-#' exp_glm <- DALEX::explain(model_glm, y = titanic$survived)
+#' model_glm <- glm(survived ~ ., family = binomial, data = titanic_imputed)
+#'
+#' glm_audit <- audit(model_glm,
+#'                    data = titanic_imputed,
+#'                    y = titanic_imputed$survived)
 #' # calculate score
-#' score(exp_glm, type = "auc")
+#' score(glm_audit, type = "auc")
 #'
 #' @export
 print.auditor_score <- function(x, ...) {

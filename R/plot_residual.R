@@ -2,14 +2,14 @@
 #'
 #' @description A plot of residuals against fitted values, observed values or any variable.
 #'
-#' @param object An object of class 'auditor_model_residual' created with \code{\link{model_residual}} function.
-#' @param ... Other 'auditor_model_residual' objects to be plotted together.
+#' @param object An object of class \code{auditor_model_residual} created with \code{\link{model_residual}} function.
+#' @param ... Other \code{auditor_model_residual} objects to be plotted together.
 #' @param variable Name of variable to order residuals on a plot.
 #' If \code{variable="_y_"}, the data is ordered by a vector of actual response (\code{y} parameter
 #' passed to the \code{\link[DALEX]{explain}} function).
 #' If \code{variable = "_y_hat_"} the data on the plot will be ordered by predicted response.
 #' If \code{variable = NULL}, unordered observations are presented.
-#' @param smooth Logical, indicates whenever smoothed lines should be added. By default it's FALSE.
+#' @param smooth Logical, indicates whenever smoothed lines should be added. By default it's \code{FALSE}.
 #' @param std_residuals Logical, indicates whenever standardized residuals should be used.
 #' @param nlabel Number of observations with the biggest absolute values of residuals to be labeled.
 #'
@@ -19,12 +19,10 @@
 #' # fit a model
 #' model_lm <- lm(life_length ~ ., data = dragons)
 #'
-#' # use DALEX package to wrap up a model into explainer
-#' exp_lm <- DALEX::explain(model_lm, data = dragons, y = dragons$life_length)
+#' lm_audit <- audit(model_lm, data = dragons, y = dragons$life_length)
 #'
 #' # validate a model with auditor
-#' library(auditor)
-#' mr_lm <- model_residual(exp_lm)
+#' mr_lm <- model_residual(lm_audit)
 #'
 #' # plot results
 #' plot_residual(mr_lm)
@@ -32,13 +30,12 @@
 #'
 #' library(randomForest)
 #' model_rf <- randomForest(life_length~., data = dragons)
-#' exp_rf <- DALEX::explain(model_rf, data = dragons, y = dragons$life_length)
-#' mr_rf <- model_residual(exp_rf)
+#' rf_audit <- audit(model_rf, data = dragons, y = dragons$life_length)
+#' mr_rf <- model_residual(rf_audit)
 #' plot_residual(mr_lm, mr_rf)
 #' plot(mr_rf, mr_rf, type = "residual")
 #'
 #'
-#' @import ggplot2
 #' @importFrom ggrepel geom_text_repel
 #'
 #' @export
@@ -121,6 +118,6 @@ plot_residual <- function(object, ..., variable = "_y_", smooth = FALSE,
 #' @rdname plot_residual
 #' @export
 plotResidual <-  function(object, ..., variable = NULL, smooth = FALSE, std_residuals = FALSE, nlabel = 0) {
-  message("Please note that 'plotResidual()' is now deprecated, it is better to use 'plot_residual()' instead.")
+  warning("Please note that 'plotResidual()' is now deprecated, it is better to use 'plot_residual()' instead.")
   plot_residual(object, ..., variable = variable, smooth = smooth, std_residuals = std_residuals, nlabel = nlabel)
 }

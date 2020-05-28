@@ -8,7 +8,7 @@
 #' @param ... Other 'auditor_model_residual' objects to be plotted together.
 #' @param scale_plot Logical, indicates whenever the plot should scale with height. By default it's FALSE.
 #'
-#' @return a `r2d3` object.
+#' @return a \code{r2d3} object
 #'
 #' @details REC curve estimates the Cumulative Distribution Function (CDF) of the error
 #'
@@ -25,18 +25,16 @@
 #' # fit a model
 #' model_lm <- lm(life_length ~ ., data = dragons)
 #'
-#' # use DALEX package to wrap up a model into explainer
-#' exp_lm <- DALEX::explain(model_lm, data = dragons, y = dragons$life_length)
+#' lm_audit <- audit(model_lm, data = dragons, y = dragons$life_length)
 #'
 #' # validate a model with auditor
-#' library(auditor)
-#' mr_lm <- model_residual(exp_lm)
+#' mr_lm <- model_residual(lm_audit)
 #' plotD3_rec(mr_lm)
 #'
 #' library(randomForest)
 #' model_rf <- randomForest(life_length~., data = dragons)
-#' exp_rf <- DALEX::explain(model_rf, data = dragons, y = dragons$life_length)
-#' mr_rf <- model_residual(exp_rf)
+#' rf_audit <- audit(model_rf, data = dragons, y = dragons$life_length)
+#' mr_rf <- model_residual(rf_audit)
 #' plotD3_rec(mr_lm, mr_rf)
 #'
 #' @export
@@ -87,6 +85,6 @@ plotD3_rec <- function(object, ..., scale_plot = FALSE) {
 #' @rdname plotD3_rec
 #' @export
 plotD3REC <- function(object, ..., scale_plot = FALSE) {
-  message("Please note that 'plotD3REC()' is now deprecated, it is better to use 'plotD3_rec()' instead.")
+  warning("Please note that 'plotD3REC()' is now deprecated, it is better to use 'plotD3_rec()' instead.")
   plotD3_rec(object, ..., scale_plot)
 }

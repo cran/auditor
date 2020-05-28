@@ -1,28 +1,31 @@
 #' @title Create Halfnormal Explanation
 #'
-#' @description  Creates 'auditor_model_halfnormal' object that can be used for plotting halfnormal plot.
+#' @description  Creates \code{auditor_model_halfnormal} object that can be used for plotting halfnormal plot.
 #'
-#' @param object An object of class 'explainer' created with function \code{\link[DALEX]{explain}} from the DALEX package.
+#' @param object An object of class \code{explainer} created with function \code{\link[DALEX]{explain}} from the DALEX package.
 #' @param quant if TRUE values on axis are on quantile scale.
 #' @param ... other parameters passed do \code{\link[hnp]{hnp}} function.
 #'
 #' @examples
-#' titanic <- na.omit(DALEX::titanic[1:100,])
+#' data(titanic_imputed, package = "DALEX")
 #'
 #' # fit a model
-#' model_glm <- glm(survived ~ ., family = binomial, data = titanic)
+#' model_glm <- glm(survived ~ ., family = binomial, data = titanic_imputed)
 #'
-#' # use DALEX package to wrap up a model into explainer
-#' exp_glm <- DALEX::explain(model_glm)
+#' glm_audit <- audit(model_glm,
+#'                    data = titanic_imputed,
+#'                    y = titanic_imputed$survived)
 #'
 #' # validate a model with auditor
-#' library(auditor)
-#' model_halfnormal(exp_glm)
+#' mh <- model_halfnormal(glm_audit)
+#' mh
+#'
+#' plot(mh)
 #'
 #' @references Moral, R., Hinde, J., & Demétrio, C. (2017). Half-Normal Plots and Overdispersed Models in R: The hnp Package.doi:http://dx.doi.org/10.18637/jss.v081.i10
 #'
-#' @return An object of the class 'auditor_model_halfnormal'.
-#'
+#' @return An object of the class \code{auditor_model_halfnormal}.
+#' @importFrom hnp hnp
 #' @importFrom stats pnorm
 #'
 #' @export
@@ -44,7 +47,7 @@ model_halfnormal <- function(object, quant = FALSE, ...){
 
   class(result) <- c("auditor_model_halfnormal", "data.frame")
 
-  result$`_label_` <- object$label
+  result$`_label_` <- factor(object$label)
 
   return(result)
 }
@@ -115,7 +118,7 @@ phalfnorm <- function(residuals)
 #' @rdname model_halfnormal
 #' @export
 modelFit <- function(object, quant = FALSE, ...){
-  message("Please note that 'modelfit()' is now deprecated, it is better to use 'model_halfnormal()' instead.")
+  warning("Please note that 'modelfit()' is now deprecated, it is better to use 'model_halfnormal()' instead.")
   model_halfnormal(object, quant)
 }
 

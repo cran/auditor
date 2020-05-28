@@ -5,16 +5,14 @@
 \alias{plotPrediction}
 \title{Predicted response vs Observed or Variable Values}
 \usage{
-plot_prediction(object, ..., variable = "_y_", smooth = FALSE,
-  abline = FALSE)
+plot_prediction(object, ..., variable = "_y_", smooth = FALSE, abline = FALSE)
 
-plotPrediction(object, ..., variable = NULL, smooth = FALSE,
-  abline = FALSE)
+plotPrediction(object, ..., variable = NULL, smooth = FALSE, abline = FALSE)
 }
 \arguments{
-\item{object}{An object of class 'auditor_model_residual.}
+\item{object}{An object of class \code{auditor_model_residual}.}
 
-\item{...}{Other modelAudit or modelResiduals objects to be plotted together.}
+\item{...}{Other \code{auditor_model_residual} objects to be plotted together.}
 
 \item{variable}{Name of variable to order residuals on a plot.
 If \code{variable="_y_"}, the data is ordered by a vector of actual response (\code{y} parameter
@@ -24,8 +22,8 @@ If \code{variable = NULL}, unordered observations are presented.}
 
 \item{smooth}{Logical, indicates whenever smooth line should be added.}
 
-\item{abline}{Logical, indicates whenever function `y = x` should be added. Works only
-with \code{variable = "_y_"} (which is a default option) or when `variable` equals actual response variable.}
+\item{abline}{Logical, indicates whenever function \code{y = x} should be added. Works only
+with \code{variable = "_y_"} (which is a default option) or when \code{variable} equals actual response variable.}
 }
 \value{
 A ggplot2 object.
@@ -39,12 +37,10 @@ dragons <- DALEX::dragons[1:100, ]
 # fit a model
 model_lm <- lm(life_length ~ ., data = dragons)
 
- # use DALEX package to wrap up a model into explainer
-exp_lm <- DALEX::explain(model_lm, data = dragons, y = dragons$life_length)
+lm_audit <- audit(model_lm, data = dragons, y = dragons$life_length)
 
 # validate a model with auditor
-library(auditor)
-mr_lm <- model_residual(exp_lm)
+mr_lm <- model_residual(lm_audit)
 
 # plot results
 plot_prediction(mr_lm, abline = TRUE)
@@ -53,8 +49,8 @@ plot(mr_lm, type = "prediction", abline = TRUE)
 
 library(randomForest)
 model_rf <- randomForest(life_length~., data = dragons)
-exp_rf <- DALEX::explain(model_rf, data = dragons, y = dragons$life_length)
-mr_rf <- model_residual(exp_rf)
+rf_audit <- audit(model_rf, data = dragons, y = dragons$life_length)
+mr_rf <- model_residual(rf_audit)
 plot_prediction(mr_lm, mr_rf, variable = "height", smooth = TRUE)
 
 

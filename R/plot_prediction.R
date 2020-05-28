@@ -3,16 +3,16 @@
 #' @description Plot of predicted response vs observed or variable Values.
 #'
 #'
-#' @param object An object of class 'auditor_model_residual.
-#' @param ... Other modelAudit or modelResiduals objects to be plotted together.
+#' @param object An object of class \code{auditor_model_residual}.
+#' @param ... Other \code{auditor_model_residual} objects to be plotted together.
 #' @param variable Name of variable to order residuals on a plot.
 #' If \code{variable="_y_"}, the data is ordered by a vector of actual response (\code{y} parameter
 #' passed to the \code{\link[DALEX]{explain}} function).
 #' If \code{variable = "_y_hat_"} the data on the plot will be ordered by predicted response.
 #' If \code{variable = NULL}, unordered observations are presented.
 #' @param smooth Logical, indicates whenever smooth line should be added.
-#' @param abline Logical, indicates whenever function `y = x` should be added. Works only
-#' with \code{variable = "_y_"} (which is a default option) or when `variable` equals actual response variable.
+#' @param abline Logical, indicates whenever function \code{y = x} should be added. Works only
+#' with \code{variable = "_y_"} (which is a default option) or when \code{variable} equals actual response variable.
 #'
 #' @return A ggplot2 object.
 #'
@@ -22,12 +22,10 @@
 #' # fit a model
 #' model_lm <- lm(life_length ~ ., data = dragons)
 #'
-#'  # use DALEX package to wrap up a model into explainer
-#' exp_lm <- DALEX::explain(model_lm, data = dragons, y = dragons$life_length)
+#' lm_audit <- audit(model_lm, data = dragons, y = dragons$life_length)
 #'
 #' # validate a model with auditor
-#' library(auditor)
-#' mr_lm <- model_residual(exp_lm)
+#' mr_lm <- model_residual(lm_audit)
 #'
 #' # plot results
 #' plot_prediction(mr_lm, abline = TRUE)
@@ -36,12 +34,10 @@
 #'
 #' library(randomForest)
 #' model_rf <- randomForest(life_length~., data = dragons)
-#' exp_rf <- DALEX::explain(model_rf, data = dragons, y = dragons$life_length)
-#' mr_rf <- model_residual(exp_rf)
+#' rf_audit <- audit(model_rf, data = dragons, y = dragons$life_length)
+#' mr_rf <- model_residual(rf_audit)
 #' plot_prediction(mr_lm, mr_rf, variable = "height", smooth = TRUE)
 #'
-#'
-#' @import ggplot2
 #'
 #' @export
 plot_prediction <- function(object, ..., variable = "_y_", smooth = FALSE, abline = FALSE) {
@@ -107,6 +103,6 @@ plot_prediction <- function(object, ..., variable = "_y_", smooth = FALSE, ablin
 #' @rdname plot_prediction
 #' @export
 plotPrediction <- function(object, ..., variable = NULL, smooth = FALSE, abline = FALSE) {
-  message("Please note that 'plotPrediction()' is now deprecated, it is better to use 'plot_prediction()' instead.")
+  warning("Please note that 'plotPrediction()' is now deprecated, it is better to use 'plot_prediction()' instead.")
   plot_prediction(object, ..., variable = variable, smooth = smooth, abline = abline)
 }
