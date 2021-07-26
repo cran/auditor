@@ -4,7 +4,7 @@
 #'
 #' @param object An object of class \code{explainer} created with function
 #'  \code{\link[DALEX]{explain}} from the DALEX package.
-#' @param data New data that will be used to calcuate the score.
+#' @param data New data that will be used to calculate the score.
 #'  Pass \code{NULL} if you want to use \code{data} from \code{object}.
 #' @param y New y parameter will be used to calculate score.
 #' @param ... Other arguments dependent on the type of score.
@@ -47,19 +47,18 @@ score_auc <- function(object, data = NULL, y = NULL, ...) {
   positive_num <- sum(pred_sorted$y == positive_label)
   negative_num <- sum(pred_sorted$y == negative_label)
 
-  tp <- cumsum(pred_sorted==positive_label)
-  fp <- cumsum(pred_sorted==negative_label)
+  tp <- cumsum(pred_sorted$y == positive_label)
+  fp <- cumsum(pred_sorted$y == negative_label)
 
   # remove duplicates
   duplicates <- rev(duplicated(rev(pred_sorted$y_hat)))
   tp <- c(0, tp[!duplicates])
   fp <- c(0, fp[!duplicates])
-  cutoffs <- c(Inf, pred_sorted$y_hat[!duplicates])
 
   xroc <- fp / negative_num
   yroc <- tp / positive_num
 
-  auc <- sum( 0.5* (xroc[2:length(xroc)]-xroc[1:length(xroc)-1])* (yroc[2:length(xroc)] +yroc[1:length(xroc)-1]) )
+  auc <- sum( 0.5 * (xroc[2:length(xroc)]-xroc[1:length(xroc)-1])* (yroc[2:length(xroc)] +yroc[1:length(xroc)-1]) )
 
   roc_results <- list(
     name = "auc",
@@ -76,7 +75,7 @@ score_auc <- function(object, data = NULL, y = NULL, ...) {
 #'
 #' @param object An object of class \code{explainer} created with function
 #'  \code{\link[DALEX]{explain}} from the DALEX package.
-#' @param data New data that will be used to calcuate the score.
+#' @param data New data that will be used to calculate the score.
 #'  Pass \code{NULL} if you want to use \code{data} from \code{object}.
 #' @param y New y parameter will be used to calculate score.
 #' @param ... Other arguments dependent on the type of score.

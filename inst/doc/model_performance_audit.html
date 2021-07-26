@@ -203,7 +203,7 @@ hr {
 <body>
 <h2>Data</h2>
 
-<p>To illustrate application of <code>auditor</code> we will use dataset &ldquo;dragons&rdquo; available in the <a href="https://github.com/pbiecek/DALEX"><code>DALEX</code></a> package. The dataset contains characteristics of fictional creatures (dragons), like year of birth, height, weight, etc (see below). The goal is to predict the length of life of dragons (a regression problem). </p>
+<p>To illustrate application of <code>auditor</code> we will use dataset &ldquo;dragons&rdquo; available in the <a href="https://github.com/ModelOriented/DALEX"><code>DALEX</code></a> package. The dataset contains characteristics of fictional creatures (dragons), like year of birth, height, weight, etc (see below). The goal is to predict the length of life of dragons (a regression problem). </p>
 
 <pre><code class="r">library(DALEX)
 data(dragons)
@@ -288,7 +288,7 @@ lm_mp
 # plot_radar(lm_mp, rf_mp, verbose = FALSE)
 </code></pre>
 
-<p>There is a possibiliy to define functions with custom model performance measure.</p>
+<p>There is a possibility to define functions with custom model performance measure.</p>
 
 <pre><code class="r">new_score &lt;- function(object) sum(sqrt(abs(object$residuals)))
 

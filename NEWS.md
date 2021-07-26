@@ -1,5 +1,11 @@
+# auditor 1.3.1
+* bugfix: `score_auc()`
+* add spellcheck
+* fix spelling
+* markdown added to suggests
+
 # auditor 1.3.0
-* new default color palete `DALEX::colors_discrete_drwhy` 
+* new default color palette `DALEX::colors_discrete_drwhy` 
 * depend on `R v3.5` to comply with `DALEX`
 * Allow for some deprecated names in `plot()` function, to make it compatible with the paper [auditor: an R Package for Model-Agnostic Visual Validation and Diagnostics](https://journal.r-project.org/archive/2019/RJ-2019-036/index.html) in The R Journal, 
 * add `arrow_size` to `plot_pca` and increase the default width value to `2`
@@ -38,7 +44,7 @@
 * Automated checks for residuals are added. See the `check_residuals()` function.
 
 # auditor 0.3.1
-* Repository with the `auditor` package was moved to new GitHub organization ([MI^2 DataLab](https://github.com/MI2DataLab/auditor)).
+* Repository with the `auditor` package was moved to new GitHub organization ([MI^2 DataLab](https://github.com/MI2DataLab)).
 
 # auditor 0.3.0
 * New five vignettes with examples.

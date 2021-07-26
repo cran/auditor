@@ -1,6 +1,6 @@
-#' Automated tests for model residuals
+#' @title Automated tests for model residuals
 #'
-#' Currently three tests are performed
+#' @description  Currently three tests are performed
 #'  - for outliers in residuals
 #'  - for autocorrelation in target variable or in residuals
 #'  - for trend in residuals as a function of target variable (detection of bias)
@@ -8,7 +8,7 @@
 #' @param object An object of class 'explainer' created with function \code{\link[DALEX]{explain}} from the DALEX package.
 #' @param ... other parameters that will be passed to further functions.
 #'
-#' @return list with statistics for particualar checks
+#' @return list with statistics for particular checks
 #' @export
 #' @importFrom  stats cor.test loess
 #' @importFrom  utils head tail
@@ -36,7 +36,9 @@ check_residuals <- function(object, ...) {
                         trend = trend)))
 }
 
-#' Checks for outliers
+#' @title Checks for outliers
+#'
+#' @description Outlier checks
 #'
 #' @param object  An object of class 'explainer' created with function \code{\link[DALEX]{explain}} from the DALEX package.
 #' @param n number of lowest and highest standardized  residuals to be presented
@@ -82,7 +84,7 @@ check_residuals_outliers <- function(object, n = 5) {
                  shift = shift))
 }
 
-#' Checks for autocorrelation in target variable or in residuals
+#' @title Checks for autocorrelation in target variable or in residuals
 #'
 #' @param object  An object of class 'explainer' created with function \code{\link[DALEX]{explain}} from the DALEX package.
 #' @param method will be passed to the cor.test functions
@@ -118,12 +120,12 @@ check_residuals_autocorrelation <- function(object, method = "pearson") {
                  residual_autocorelation = residual_autocorrelation))
 }
 
-#' Checks for trend in residuals
+#' @title Checks for trend in residuals
 #'
 #' Calculates loess fit for residuals and then extracts statistics that shows how far is this fit from one without trend
 #'
 #' @param object  An object of class 'explainer' created with function \code{\link[DALEX]{explain}} from the DALEX package.
-#' @param B number fo samplings
+#' @param B number of samplings
 #'
 #' @return standardized   loess fit for residuals
 #' @export
